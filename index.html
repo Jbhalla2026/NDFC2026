@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NDFC Barca U14 — 50/50 Jackpot Draw · Italy 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-lt:#F0D080;--gold-dk:#8B6914;
+  --red:#C8302A;--red-dk:#8B1F1A;--red-lt:#E05050;
+  --blue:#1A3A6B;--blue-lt:#2451A0;
+  --green-lt:#27A05A;
+  --bg:#0A0F1E;--surface:#13192E;--surface2:#1C2440;--border:#2A3355;
+  --text:#F0EDE6;--muted:#8896BB;--muted2:#5A6A90;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
+.shell{max-width:820px;margin:0 auto;padding:0 1.2rem 4rem}
+
+/* Hero */
+.hero{text-align:center;padding:2.5rem 1rem 1.5rem}
+.team-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:.35rem .9rem .35rem .55rem;margin-bottom:1.2rem}
+.badge-dot{width:30px;height:30px;border-radius:50%;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.75rem;color:var(--gold);letter-spacing:.04em}
+.badge-text{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-size:clamp(3rem,10vw,5.8rem);line-height:.9;color:var(--gold)}
+.hero h1 span{color:var(--text)}
+.hero-sub{font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:.55rem}
+.stripe{height:2px;background:linear-gradient(90deg,transparent,var(--blue-lt) 30%,var(--gold) 50%,var(--blue-lt) 70%,transparent);margin:.9rem 0}
+.live-row{font-size:.67rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+.ldot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red-lt);animation:pulse 1.8s infinite;margin-right:.35rem;vertical-align:middle}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Mission */
+.mission-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.4rem;display:flex;gap:1.2rem;align-items:flex-start}
+.mission-icon{flex-shrink:0;width:46px;height:46px;border-radius:10px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center}
+.mission-icon svg{width:22px;height:22px;fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mission-body h3{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.mission-body p{font-size:.88rem;color:var(--text);line-height:1.65}
+.mission-body p em{color:var(--gold);font-style:normal;font-weight:500}
+.trip-pills{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.85rem}
+.pill{background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:.2rem .75rem;font-size:.7rem;color:var(--muted);letter-spacing:.05em}
+.pill.hi{border-color:var(--gold-dk);color:var(--gold-lt)}
+
+/* Jackpot */
+.jackpot-card{background:var(--surface);border:1px solid var(--gold-dk);border-radius:16px;padding:2rem 1.5rem;text-align:center;margin-bottom:1.4rem;position:relative;overflow:hidden}
+.jackpot-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.07) 0%,transparent 65%);pointer-events:none}
+.jlabel{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.jamt{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.2rem,12vw,6rem);color:var(--gold);line-height:1}
+.jsub{font-size:.78rem;color:var(--muted);margin-top:.35rem}
+.j3{display:flex;gap:.8rem;justify-content:center;margin-top:1.1rem;flex-wrap:wrap}
+.jbox{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.7rem 1.2rem;text-align:center;min-width:115px}
+.jbl{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.jbv{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;color:var(--gold-lt)}
+
+/* Progress */
+.prog-wrap{margin-bottom:1.3rem}
+.prog-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.55rem}
+.prog-hdr span{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.prog-hdr strong{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--text)}
+.prog-track{height:14px;background:var(--surface2);border-radius:99px;border:1px solid var(--border);overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--red-dk),var(--red),var(--red-lt));border-radius:99px;transition:width .7s cubic-bezier(.4,0,.2,1);min-width:3px}
+.prog-ticks{display:flex;justify-content:space-between;margin-top:.3rem}
+.prog-ticks span{font-size:.62rem;color:var(--muted2)}
+
+/* Stats */
+.stats3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin-bottom:1.3rem}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem .75rem;text-align:center}
+.scard .sv{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;color:var(--text)}
+.scard .sl{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.12rem}
+
+/* Divider */
+.divider{height:1px;background:var(--border);margin:1.5rem 0}
+
+/* ── BUY TICKETS ── */
+.buy-section{background:var(--surface);border:2px solid var(--gold-dk);border-radius:16px;padding:1.8rem 1.6rem;margin-bottom:1.4rem;position:relative;overflow:hidden}
+.buy-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.05) 0%,transparent 60%);pointer-events:none}
+.buy-title{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--gold);margin-bottom:.3rem}
+.buy-subtitle{font-size:.78rem;color:var(--muted);margin-bottom:1.3rem;line-height:1.55}
+.step-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem}
+
+/* Package selector */
+.pkg-selector{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.65rem;margin-bottom:1.4rem}
+.pkg-opt{background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:.9rem .8rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;user-select:none}
+.pkg-opt:hover{border-color:var(--gold-dk)}
+.pkg-opt.selected{border-color:var(--gold);background:rgba(201,168,76,.07)}
+.pkg-opt .po-tix{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text);line-height:1}
+.pkg-opt .po-label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:.1rem 0 .35rem}
+.pkg-opt .po-price{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold)}
+.pkg-opt .po-val{font-size:.6rem;color:var(--muted2)}
+.pkg-opt .po-check{position:absolute;top:.45rem;right:.55rem;width:16px;height:16px;border-radius:50%;background:var(--gold);display:none;align-items:center;justify-content:center}
+.pkg-opt .po-check svg{width:9px;height:9px;stroke:#0A0F1E;stroke-width:2.5;fill:none}
+.pkg-opt.selected .po-check{display:flex}
+.pkg-opt.best-val{border-color:var(--gold-dk)}
+.bv-badge{background:var(--gold-dk);color:var(--gold-lt);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;padding:.12rem .45rem;border-radius:4px;display:inline-block;margin-bottom:.22rem}
+
+/* E-transfer box */
+.etransfer-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.3rem;margin-bottom:1.4rem;display:none}
+.etransfer-box.show{display:block}
+.et-steps{display:flex;flex-direction:column;gap:.85rem}
+.et-step{display:flex;gap:.85rem;align-items:flex-start}
+.et-num{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--gold-dk);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.85rem;color:var(--gold-lt);margin-top:.05rem}
+.et-step-body{flex:1;min-width:0}
+.et-step-label{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem}
+.et-copy-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.et-val{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:.38rem .75rem;font-size:.88rem;color:var(--text);font-family:monospace;flex:1;min-width:0;word-break:break-all}
+.et-val.big{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--gold);letter-spacing:.04em;font-family:'Bebas Neue',sans-serif}
+.copy-mini{background:var(--blue-lt);color:var(--text);border:none;border-radius:7px;padding:.38rem .8rem;font-size:.74rem;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;font-weight:500;transition:background .2s;flex-shrink:0}
+.copy-mini:hover{background:var(--gold-dk)}
+.et-note{font-size:.73rem;color:var(--muted);line-height:1.55;margin-top:.3rem}
+
+/* Buyer form */
+.buyer-form{display:none}
+.buyer-form.show{display:block}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:.8rem}
+.form-field label{display:block;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.form-field input,.form-field select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.5rem .8rem;font-family:'DM Sans',sans-serif;font-size:.9rem;transition:border-color .2s;-webkit-appearance:none}
+.form-field input:focus,.form-field select:focus{outline:none;border-color:var(--gold-dk)}
+.form-field.full{grid-column:1/-1}
+.order-summary{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem;margin-bottom:1rem;font-size:.84rem}
+.os-row{display:flex;justify-content:space-between;align-items:center;padding:.25rem 0}
+.os-row.total{border-top:1px solid var(--border);margin-top:.35rem;padding-top:.6rem;font-weight:500}
+.os-label{color:var(--muted)}
+.os-val{color:var(--text)}
+.os-val.gold{color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1.2rem}
+.submit-btn{width:100%;background:var(--gold-dk);color:var(--gold-lt);border:none;border-radius:10px;padding:.8rem 1.5rem;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;cursor:pointer;transition:background .2s;margin-bottom:.7rem}
+.submit-btn:hover{background:var(--gold)}
+.submit-btn:active{transform:scale(.99)}
+.submit-btn:disabled{background:var(--border);color:var(--muted2);cursor:not-allowed;transform:none}
+.form-disclaimer{font-size:.7rem;color:var(--muted2);line-height:1.6;text-align:center}
+
+/* Success */
+.success-card{background:var(--surface2);border:1px solid var(--green-lt);border-radius:12px;padding:1.5rem;text-align:center;display:none}
+.success-card.show{display:block}
+.success-icon{width:50px;height:50px;border-radius:50%;background:var(--green-lt);display:flex;align-items:center;justify-content:center;margin:0 auto .9rem}
+.success-icon svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.success-card h3{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--green-lt);margin-bottom:.45rem}
+.success-card p{font-size:.84rem;color:var(--muted);line-height:1.65}
+
+/* Share */
+.share-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:1.4rem}
+.share-title{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+.share-url{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.url-box{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.47rem .85rem;font-size:.8rem;color:var(--muted);font-family:monospace;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sbtn{background:var(--blue-lt);color:var(--text);border:none;border-radius:8px;padding:.47rem 1.1rem;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .2s}
+.sbtn:hover{background:var(--gold-dk)}
+.sbtn:active{transform:scale(.97)}
+.sbtn.sm{font-size:.74rem;padding:.35rem .85rem}
+.share-note{font-size:.72rem;color:var(--muted2);margin-top:.6rem;line-height:1.5}
+.share-btns{display:flex;gap:.45rem;margin-top:.65rem;flex-wrap:wrap}
+.qr-box{width:72px;height:72px;border:1px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);text-align:center;line-height:1.4;margin-top:.65rem;flex-shrink:0}
+
+/* Admin */
+.admin-toggle{display:flex;align-items:center;gap:.5rem;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);cursor:pointer;user-select:none;width:fit-content;margin:0 auto 1rem;padding:.42rem .95rem;border:1px solid var(--border);border-radius:8px;background:var(--surface);transition:border-color .2s,color .2s}
+.admin-toggle:hover{border-color:var(--gold-dk);color:var(--text)}
+.adot{width:7px;height:7px;border-radius:50%;background:var(--muted2);transition:background .2s;flex-shrink:0}
+.lock-gate{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.8rem 1.5rem;margin-bottom:.5rem;text-align:center;display:none}
+.lock-gate.show{display:block}
+.lock-icon{width:46px;height:46px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto .9rem}
+.lock-icon svg{width:21px;height:21px;fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.lock-gate h3{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.85rem}
+.pw-row{display:flex;gap:.6rem;max-width:290px;margin:0 auto}
+.pw-input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.52rem .8rem;font-family:'DM Sans',sans-serif;font-size:.9rem;transition:border-color .2s}
+.pw-input:focus{outline:none;border-color:var(--gold-dk)}
+.pw-btn{background:var(--gold-dk);color:var(--gold-lt);border:none;border-radius:8px;padding:.52rem 1.1rem;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;cursor:pointer;transition:background .2s}
+.pw-btn:hover{background:var(--gold)}
+.pw-err{font-size:.74rem;color:#E24B4A;margin-top:.55rem;min-height:1.1rem}
+.admin-panel{background:var(--surface);border:1px solid var(--gold-dk);border-radius:14px;padding:1.6rem;display:none;margin-bottom:.5rem}
+.admin-panel.open{display:block}
+.apanel-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.3rem;gap:.5rem;flex-wrap:wrap}
+.apanel-title{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;color:var(--gold)}
+.logout-btn{font-size:.67rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;border:1px solid var(--border);border-radius:6px;padding:.22rem .65rem;background:none;transition:color .2s,border-color .2s}
+.logout-btn:hover{color:var(--red-lt);border-color:var(--red-dk)}
+.agrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.9rem;margin-bottom:1.1rem}
+.afield label{display:block;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.32rem}
+.atag{display:inline-block;font-size:.58rem;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:.1rem .42rem;color:var(--muted);margin-left:.3rem}
+.afield input{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.46rem .75rem;font-family:'DM Sans',sans-serif;font-size:.9rem;width:100%;transition:border-color .2s}
+.afield input:focus{outline:none;border-color:var(--gold-dk)}
+.abtnrow{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.btn-upd{background:var(--gold-dk);color:var(--gold-lt);border:none;border-radius:8px;padding:.55rem 1.6rem;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.08em;cursor:pointer;transition:background .2s}
+.btn-upd:hover{background:var(--gold)}
+.btn-upd:active{transform:scale(.97)}
+.alog{margin-top:.95rem;font-size:.74rem;color:var(--muted);background:var(--surface2);border-radius:8px;padding:.65rem .9rem;border-left:2px solid var(--gold-dk);line-height:1.55}
+
+/* Ticket emailer */
+.emailer-divider{height:1px;background:var(--border);margin:1.4rem 0}
+.emailer-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);margin-bottom:.25rem}
+.emailer-sub{font-size:.74rem;color:var(--muted);margin-bottom:1.1rem;line-height:1.5}
+.emailer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin-bottom:.9rem}
+.emailer-field label{display:block;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.28rem}
+.emailer-field input,.emailer-field select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.46rem .75rem;font-family:'DM Sans',sans-serif;font-size:.9rem;transition:border-color .2s}
+.emailer-field input:focus,.emailer-field select:focus{outline:none;border-color:var(--gold-dk)}
+.emailer-field.full{grid-column:1/-1}
+.tix-preview{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem;margin-bottom:.9rem;font-size:.82rem}
+.tix-preview-label{font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.tix-numbers{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.5rem}
+.tix-num{background:var(--surface);border:1px solid var(--gold-dk);border-radius:6px;padding:.2rem .55rem;font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:var(--gold-lt);letter-spacing:.04em}
+.tix-preview-note{font-size:.7rem;color:var(--muted2);line-height:1.5}
+.email-preview{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;margin-bottom:.9rem;display:none}
+.email-preview.show{display:block}
+.ep-label{font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.ep-body{font-size:.82rem;color:var(--text);line-height:1.7;white-space:pre-wrap;font-family:'DM Sans',sans-serif}
+.send-btn{width:100%;background:var(--green-lt);color:#fff;border:none;border-radius:10px;padding:.75rem 1.5rem;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.08em;cursor:pointer;transition:background .2s;margin-bottom:.5rem}
+.send-btn:hover{background:#1f8a4a}
+.send-btn:active{transform:scale(.99)}
+.send-btn:disabled{background:var(--border);color:var(--muted2);cursor:not-allowed;transform:none}
+.emailer-log{font-size:.73rem;color:var(--muted);background:var(--surface2);border-radius:8px;padding:.6rem .85rem;border-left:2px solid var(--green-lt);line-height:1.5;min-height:2.2rem;margin-top:.5rem;display:none}
+.emailer-log.show{display:block}
+.emailer-log.ok{border-left-color:var(--green-lt);color:#7bd4a0}
+.emailer-log.err{border-left-color:var(--red-lt);color:var(--red-lt)}
+
+/* Sales history log */
+.sales-history{margin-top:.9rem;display:none}
+.sales-history.show{display:block}
+.sh-label{font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.sh-table{width:100%;border-collapse:collapse;font-size:.78rem}
+.sh-table th{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);padding:.3rem .6rem;text-align:left;border-bottom:1px solid var(--border)}
+.sh-table td{padding:.4rem .6rem;border-bottom:1px solid var(--surface2);color:var(--text);vertical-align:middle}
+.sh-table tr:last-child td{border-bottom:none}
+.sh-table td.num{font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:var(--gold-lt)}
+.sh-table td.muted{color:var(--muted)}
+.sh-clear{background:none;border:none;color:var(--muted2);font-size:.65rem;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;margin-top:.5rem;padding:.2rem 0;transition:color .2s}
+.sh-clear:hover{color:var(--red-lt)}
+
+/* Draw total auto-fill badge */
+.draw-autofill-note{font-size:.7rem;color:#7bd4a0;margin-top:.3rem;display:none}
+.draw-autofill-note.show{display:block}
+
+/* Footer */
+.footer-note{text-align:center;font-size:.7rem;color:var(--muted2);margin-top:2.2rem;line-height:1.75;padding-top:1.1rem;border-top:1px solid var(--border)}
+.draw-divider{height:1px;background:var(--border);margin:1.4rem 0}
+.draw-section-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);margin-bottom:.25rem}
+.draw-section-sub{font-size:.74rem;color:var(--muted);margin-bottom:1.1rem;line-height:1.5}
+.draw-info-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.7rem;margin-bottom:1rem}
+.draw-info-box{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:.75rem .9rem}
+.draw-info-box label{display:block;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.28rem}
+.draw-info-box input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:.42rem .7rem;font-family:'DM Sans',sans-serif;font-size:.9rem;transition:border-color .2s}
+.draw-info-box input:focus{outline:none;border-color:var(--gold-dk)}
+.draw-btn{width:100%;border:none;border-radius:12px;padding:.9rem 1.5rem;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.1em;cursor:pointer;transition:background .2s,transform .1s;margin-bottom:.8rem;background:linear-gradient(135deg,var(--red-dk),var(--red));color:#fff;position:relative;overflow:hidden}
+.draw-btn:hover{background:linear-gradient(135deg,var(--red),var(--red-lt))}
+.draw-btn:active{transform:scale(.98)}
+.draw-btn:disabled{background:var(--border);color:var(--muted2);cursor:not-allowed;transform:none}
+.draw-result{display:none;border-radius:14px;overflow:hidden;margin-bottom:.8rem}
+.draw-result.show{display:block}
+.draw-result-inner{background:var(--surface2);border:2px solid var(--gold);border-radius:14px;padding:1.5rem;text-align:center}
+.draw-result-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.draw-winning-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,12vw,5rem);color:var(--gold);line-height:1;letter-spacing:.05em}
+.draw-winning-num.spinning{animation:spinNum .08s steps(1) infinite}
+@keyframes spinNum{0%{opacity:1}50%{opacity:.4}}
+.draw-winner-name{font-size:1rem;color:var(--text);margin-top:.4rem;font-weight:500}
+.draw-winner-note{font-size:.75rem;color:var(--muted);margin-top:.3rem;line-height:1.5}
+.draw-confetti{display:flex;justify-content:center;gap:.4rem;margin-top:.8rem;font-size:1.4rem;letter-spacing:.1em;display:none}
+.draw-confetti.show{display:flex}
+.draw-reset{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:.38rem .9rem;font-size:.72rem;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;transition:border-color .2s,color .2s;display:none;margin-top:.3rem}
+.draw-reset:hover{border-color:var(--gold-dk);color:var(--text)}
+.draw-reset.show{display:inline-block}
+
+/* Footer */
+.footer-note{text-align:center;font-size:.7rem;color:var(--muted2);margin-top:2.2rem;line-height:1.75;padding-top:1.1rem;border-top:1px solid var(--border)}
+
+@media(max-width:500px){
+  .mission-card{flex-direction:column;gap:.8rem}
+  .j3{gap:.6rem}
+  .jbox{min-width:90px;padding:.6rem .75rem}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="live-row"><span class="ldot"></span>Live fundraiser</div>
+    <div class="team-badge">
+      <div class="badge-dot">NDFC</div>
+      <div class="badge-text">Barca Academy &bull; U14 &bull; Italy 2026</div>
+    </div>
+    <h1>50/50<br><span>Jackpot</span> Draw</h1>
+    <div class="hero-sub">5,000 tickets &bull; Winner takes half</div>
+  </div>
+  <div class="stripe"></div>
+
+  <!-- Mission -->
+  <div class="mission-card">
+    <div class="mission-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 0 1 0 20M2 12h20"/><path d="M12 2c-4 5-4 15 0 20M12 2c4 5 4 15 0 20"/></svg>
+    </div>
+    <div class="mission-body">
+      <h3>Why we're fundraising</h3>
+      <p>The <em>NDFC Barca U14</em> soccer team has earned the incredible opportunity to travel to <em>Italy</em> — competing against top European clubs, training at elite facilities, and experiencing the culture of the world's most passionate soccer nation. Every ticket sold brings these young athletes one step closer to the pitch in Italy. <em>Your support makes the dream real.</em></p>
+      <p style="margin-top:.75rem;font-size:.88rem;color:var(--text);line-height:1.65">Draw deadline: <em>August 31, 2026</em> — all tickets must be sold by this date. Don't miss your chance to win!</p>
+      <div class="trip-pills">
+        <span class="pill hi">Italy 2026</span>
+        <span class="pill">Elite competition</span>
+        <span class="pill">U14 player development</span>
+        <span class="pill">International experience</span>
+        <span class="pill hi">Deadline: Aug 31, 2026</span>
+        <span class="pill hi">NDFC Barca Academy</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jackpot -->
+  <div class="jackpot-card">
+    <div class="jlabel">Current jackpot pool</div>
+    <div class="jamt" id="jackpotAmt">$0</div>
+    <div class="jsub">50% goes to the lucky winner &bull; 50% funds the Italy trip</div>
+    <div class="j3">
+      <div class="jbox"><div class="jbl">Winner gets</div><div class="jbv" id="winnerAmt">$0</div></div>
+      <div class="jbox"><div class="jbl">Italy fund</div><div class="jbv" id="orgAmt">$0</div></div>
+      <div class="jbox"><div class="jbl">Tickets left</div><div class="jbv" id="tixLeft">5,000</div></div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="prog-wrap">
+    <div class="prog-hdr">
+      <span>Tickets sold</span>
+      <strong><span id="soldCount">0</span> / 5,000</strong>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progBar" style="width:0%"></div></div>
+    <div class="prog-ticks"><span>0</span><span>1,250</span><span>2,500</span><span>3,750</span><span>5,000</span></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats3">
+    <div class="scard"><div class="sv" id="pctSold">0%</div><div class="sl">Sold</div></div>
+    <div class="scard"><div class="sv" id="revToDate">$0</div><div class="sl">Revenue</div></div>
+    <div class="scard"><div class="sv">$25,000</div><div class="sl">Max jackpot</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══════════ BUY TICKETS ══════════ -->
+  <div class="buy-section">
+    <div class="buy-title">Buy tickets</div>
+    <div class="buy-subtitle">Choose your package, send an e-transfer, then fill in the short form below. We'll confirm your ticket numbers by email within 24 hours.</div>
+
+    <!-- Step 1 -->
+    <div class="step-label">Step 1 &mdash; Choose your package</div>
+    <div class="pkg-selector">
+      <div class="pkg-opt" onclick="selectPkg(this,1,10)">
+        <div class="po-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></div>
+        <div class="po-tix">1</div><div class="po-label">Ticket</div>
+        <div class="po-price">$10</div><div class="po-val">$10 / ticket</div>
+      </div>
+      <div class="pkg-opt" onclick="selectPkg(this,5,25)">
+        <div class="po-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></div>
+        <div class="po-tix">5</div><div class="po-label">Pack</div>
+        <div class="po-price">$25</div><div class="po-val">$5 / ticket</div>
+      </div>
+      <div class="pkg-opt best-val" onclick="selectPkg(this,15,50)">
+        <div class="po-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></div>
+        <div class="bv-badge">Best value</div>
+        <div class="po-tix">15</div><div class="po-label">Pack</div>
+        <div class="po-price">$50</div><div class="po-val">$3.33 / ticket</div>
+      </div>
+      <div class="pkg-opt" onclick="selectPkg(this,40,100)">
+        <div class="po-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></div>
+        <div class="po-tix">40</div><div class="po-label">Pack</div>
+        <div class="po-price">$100</div><div class="po-val">$2.50 / ticket</div>
+      </div>
+    </div>
+
+    <!-- Step 2: E-transfer instructions -->
+    <div class="etransfer-box" id="etransferBox">
+      <div class="step-label">Step 2 &mdash; Send your e-transfer</div>
+      <div class="et-steps">
+        <div class="et-step">
+          <div class="et-num">1</div>
+          <div class="et-step-body">
+            <div class="et-step-label">Send to this e-transfer email</div>
+            <div class="et-copy-row">
+              <div class="et-val" id="etEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cca2a8aaafaeadbeafada5b8ada0b58caba1ada5a0e2afa3a1">[email&#160;protected]</a></div>
+              <button class="copy-mini" onclick="copyField('etEmail',this)">Copy</button>
+            </div>
+            <div class="et-note">Open your banking app &rarr; Interac e-Transfer &rarr; Send money &rarr; enter the address above.</div>
+          </div>
+        </div>
+        <div class="et-step">
+          <div class="et-num">2</div>
+          <div class="et-step-body">
+            <div class="et-step-label">Enter this exact amount</div>
+            <div class="et-copy-row">
+              <div class="et-val big" id="etAmountDisplay">$0</div>
+              <button class="copy-mini" onclick="copyText(selectedPrice.toString(),this)">Copy</button>
+            </div>
+          </div>
+        </div>
+        <div class="et-step">
+          <div class="et-num">3</div>
+          <div class="et-step-body">
+            <div class="et-step-label">Use this message / memo</div>
+            <div class="et-copy-row">
+              <div class="et-val" id="etMemo">NDFC 5050 - 1 ticket - Your Name</div>
+              <button class="copy-mini" onclick="copyField('etMemo',this)">Copy</button>
+            </div>
+            <div class="et-note">Replace "Your Name" with your full name so we can match your payment to your registration.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Registration form -->
+    <div class="buyer-form" id="buyerForm">
+      <div class="step-label" style="margin-top:1.2rem">Step 3 &mdash; Register your purchase</div>
+      <div style="font-size:.8rem;color:var(--muted);margin-bottom:1rem;line-height:1.55">Fill in your details <strong style="color:var(--text)">after</strong> sending the e-transfer. We'll email your ticket numbers within 24 hours once payment is verified.</div>
+
+      <div class="order-summary">
+        <div class="os-row"><span class="os-label">Package</span><span class="os-val" id="osPkg">—</span></div>
+        <div class="os-row"><span class="os-label">Tickets</span><span class="os-val" id="osTix">—</span></div>
+        <div class="os-row total"><span class="os-label">Total sent via e-transfer</span><span class="os-val gold" id="osTotal">—</span></div>
+      </div>
+
+      <!--
+        ╔══════════════════════════════════════════════════════╗
+        ║  SETUP INSTRUCTIONS — READ BEFORE GOING LIVE        ║
+        ║                                                      ║
+        ║  1. Go to https://formspree.io and sign up free     ║
+        ║  2. Click "New Form"                                 ║
+        ║  3. Copy your Form ID (looks like: xpwzgkla)        ║
+        ║  4. Replace YOUR_FORMSPREE_ID below with that ID    ║
+        ║  5. Also update ETRANSFER_EMAIL in the script below ║
+        ╚══════════════════════════════════════════════════════╝
+      -->
+      <form id="ticketForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" onsubmit="handleSubmit(event)">
+        <input type="hidden" name="Package"  id="fPkg">
+        <input type="hidden" name="Tickets"  id="fTix">
+        <input type="hidden" name="Amount"   id="fAmt">
+        <input type="hidden" name="_subject" value="NDFC 50/50 — New ticket purchase registration">
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label>First name *</label>
+            <input type="text" name="First name" required placeholder="e.g. Sarah">
+          </div>
+          <div class="form-field">
+            <label>Last name *</label>
+            <input type="text" name="Last name" required placeholder="e.g. Johnson">
+          </div>
+          <div class="form-field">
+            <label>Email address *</label>
+            <input type="email" name="Email" required placeholder="your@email.com">
+          </div>
+          <div class="form-field">
+            <label>Phone number</label>
+            <input type="tel" name="Phone" placeholder="Optional">
+          </div>
+          <div class="form-field full">
+            <label>E-transfer confirmation / reference number</label>
+            <input type="text" name="Confirmation number" placeholder="Optional — helps us match your payment faster">
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Submit my ticket registration</button>
+        <div class="form-disclaimer">
+          By submitting you confirm you have already sent the e-transfer. Ticket numbers will be assigned and emailed once payment is verified (within 24 hrs). Draw closes August 31, 2026.
+        </div>
+      </form>
+
+      <div class="success-card" id="successCard">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3>Registration received!</h3>
+        <p>Thank you for supporting the NDFC Barca U14 Italy trip! We'll verify your e-transfer and email your official ticket numbers within <strong style="color:var(--text)">24 hours</strong>.<br><br>Good luck — you could be taking home half the pot!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share -->
+  <div class="share-section">
+    <div class="share-title">Share this draw</div>
+    <div class="share-url">
+      <div class="url-box">https://ndfcfundraising.tiiny.site/</div>
+      <button class="sbtn" id="copyBtn" onclick="copyLink()">Copy link</button>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:1.2rem;flex-wrap:wrap;margin-top:.8rem">
+      <div style="flex:1;min-width:200px">
+        <div class="share-note">Share with family, friends &amp; supporters — every ticket helps send our U14 players to Italy!</div>
+        <div class="share-btns">
+          <button class="sbtn sm" onclick="shareMsg('sms')">Text a friend</button>
+          <button class="sbtn sm" onclick="shareMsg('email')">Email</button>
+          <button class="sbtn sm" onclick="shareMsg('copy')">Copy message</button>
+        </div>
+      </div>
+      <div class="qr-box">QR<br>code<br>here</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Admin -->
+  <div class="admin-toggle" id="adminToggle" onclick="toggleAdminGate()">
+    <div class="adot" id="adminDot"></div>Admin panel
+  </div>
+
+  <div class="lock-gate" id="lockGate">
+    <div class="lock-icon">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <h3>Admin access required</h3>
+    <div class="pw-row">
+      <input class="pw-input" type="password" id="pwInput" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPw()">
+      <button class="pw-btn" onclick="checkPw()">Enter</button>
+    </div>
+    <div class="pw-err" id="pwErr"></div>
+  </div>
+
+  <div class="admin-panel" id="adminPanel">
+    <div class="apanel-hdr">
+      <div class="apanel-title">Update tickets sold</div>
+      <button class="logout-btn" onclick="logout()">Lock panel</button>
+    </div>
+    <div class="agrid">
+      <div class="afield"><label>Single tickets <span class="atag">$10 each</span></label><input type="number" id="inp1" min="0" value="0"></div>
+      <div class="afield"><label>5-packs sold <span class="atag">$25 / pack</span></label><input type="number" id="inp5" min="0" value="0"></div>
+      <div class="afield"><label>15-packs sold <span class="atag">$50 / pack</span></label><input type="number" id="inp15" min="0" value="0"></div>
+      <div class="afield"><label>40-packs sold <span class="atag">$100 / pack</span></label><input type="number" id="inp40" min="0" value="0"></div>
+    </div>
+    <div class="abtnrow">
+      <button class="btn-upd" onclick="updateTickets()">Update jackpot</button>
+      <span style="font-size:.73rem;color:var(--muted)">Enter cumulative totals per category</span>
+    </div>
+    <div class="alog" id="adminLog">No updates recorded yet.</div>
+
+    <!-- Sales history log -->
+    <div class="sales-history" id="salesHistory">
+      <div class="sh-label">Sales update history</div>
+      <table class="sh-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Singles</th>
+            <th>5-packs</th>
+            <th>15-packs</th>
+            <th>40-packs</th>
+            <th>Total tickets</th>
+            <th>Pool</th>
+          </tr>
+        </thead>
+        <tbody id="salesHistoryBody"></tbody>
+      </table>
+      <button class="sh-clear" onclick="clearSalesHistory()">Clear history</button>
+    </div>
+    <div class="emailer-divider"></div>
+    <div class="emailer-title">Send ticket confirmation</div>
+    <div class="emailer-sub">Fill in the buyer's details, review the generated email, then hit send. Ticket numbers are assigned sequentially — enter the next available starting number.</div>
+
+    <div class="emailer-grid">
+      <div class="emailer-field">
+        <label>Buyer first name *</label>
+        <input type="text" id="eBuyerFirst" placeholder="e.g. Sarah" oninput="buildPreview()">
+      </div>
+      <div class="emailer-field">
+        <label>Buyer last name *</label>
+        <input type="text" id="eBuyerLast" placeholder="e.g. Johnson" oninput="buildPreview()">
+      </div>
+      <div class="emailer-field">
+        <label>Buyer email *</label>
+        <input type="email" id="eBuyerEmail" placeholder="buyer@email.com" oninput="buildPreview()">
+      </div>
+      <div class="emailer-field">
+        <label>Package purchased</label>
+        <select id="ePkg" onchange="syncPkgFields()">
+          <option value="1|10">1 ticket — $10</option>
+          <option value="5|25">5-pack — $25</option>
+          <option value="15|50" selected>15-pack — $50</option>
+          <option value="40|100">40-pack — $100</option>
+        </select>
+      </div>
+      <div class="emailer-field">
+        <label>Amount paid</label>
+        <input type="text" id="eAmtPaid" placeholder="$50" oninput="buildPreview()">
+      </div>
+      <div class="emailer-field">
+        <label>Starting ticket # *</label>
+        <input type="number" id="eStartNum" min="1" max="5000" placeholder="e.g. 1" value="1" oninput="buildPreview()">
+      </div>
+    </div>
+
+    <!-- Ticket number preview -->
+    <div class="tix-preview" id="tixPreview">
+      <div class="tix-preview-label">Ticket numbers that will be assigned</div>
+      <div class="tix-numbers" id="tixNumDisplay"></div>
+      <div class="tix-preview-note" id="tixNextHint"></div>
+    </div>
+
+    <!-- Email body preview -->
+    <div class="email-preview" id="emailPreview">
+      <div class="ep-label">Email preview — this is what the buyer will receive</div>
+      <div class="ep-body" id="emailBody"></div>
+    </div>
+
+    <button class="send-btn" id="sendEmailBtn" onclick="sendTicketEmail()" disabled>Send ticket confirmation email</button>
+    <div class="emailer-log" id="emailerLog"></div>
+
+    <!-- ── Draw winner ── -->
+    <div class="draw-divider"></div>
+    <div class="draw-section-title">Draw the winner</div>
+    <div class="draw-section-sub">Enter the total number of tickets sold, then hit the draw button. A winning number will be randomly selected from the sold pool with a live animated reveal — perfect for streaming on social media.</div>
+
+    <div class="draw-info-row">
+      <div class="draw-info-box">
+        <label>Total tickets sold</label>
+        <input type="number" id="drawTotalSold" min="1" max="5000" placeholder="e.g. 3500" value="">
+        <div class="draw-autofill-note" id="drawAutofillNote">Auto-filled from tickets sold above</div>
+      </div>
+      <div class="draw-info-box">
+        <label>Draw event name / note</label>
+        <input type="text" id="drawEventNote" placeholder="e.g. Live draw — Aug 31, 2026" value="NDFC Barca U14 · Italy 2026 · 50/50 Draw">
+      </div>
+    </div>
+
+    <button class="draw-btn" id="drawBtn" onclick="runDraw()">Draw the winning ticket</button>
+
+    <div class="draw-result" id="drawResult">
+      <div class="draw-result-inner">
+        <div class="draw-result-label" id="drawEventLabel">NDFC Barca U14 · Italy 2026 · 50/50 Draw</div>
+        <div class="draw-winning-num" id="drawWinningNum">----</div>
+        <div class="draw-winner-name" id="drawWinnerName"></div>
+        <div class="draw-winner-note" id="drawWinnerNote"></div>
+        <div class="draw-confetti" id="drawConfetti">★ ★ ★ ★ ★</div>
+        <div style="margin-top:.9rem">
+          <button class="draw-reset show" onclick="resetDraw()">Reset draw</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Maximum jackpot at full sell-out: <strong style="color:var(--gold)">$25,000</strong> &bull; Winner: $12,500 &bull; Italy fund: $12,500<br>
+    All proceeds supporting the NDFC Barca U14 team trip to Italy &bull; Draw closes August 31, 2026 &bull; Thank you!
+  </div>
+
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  /* ═══════════════════════════════════════════
+     CONFIG — update these values before going live
+  ═══════════════════════════════════════════ */
+  const ADMIN_PW        = 'ndfc2025';                  // change to your preferred password
+  const ETRANSFER_EMAIL = 'jay@jayshiv.ca';  // replace with real e-transfer email
+  const SHARE_URL       = 'https://ndfcfundraising.tiiny.site/';
+  const SHARE_MSG       = 'Support the NDFC Barca U14 team on their trip to Italy!\nBuy a 50/50 raffle ticket — the winner takes half the pot. Tickets from just $10.\nDraw closes Aug 31, 2026.\n\n' + SHARE_URL;
+  const TOTAL_TIKS      = 5000;
+
+  /* ── EmailJS config (sign up free at emailjs.com) ──
+     1. Go to emailjs.com → sign up → Add a Service (connect Gmail)
+     2. Create an Email Template — use these variables in the template body:
+        {{to_email}}, {{to_name}}, {{subject}}, {{message}}
+     3. Copy your Public Key, Service ID, and Template ID below             */
+  const EJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';   // e.g. 'user_aBcDeFgHiJkL'
+  const EJS_SERVICE_ID  = 'YOUR_SERVICE_ID';            // e.g. 'service_abc123'
+  const EJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';           // e.g. 'template_xyz789'
+  /* ═══════════════════════════════════════════ */
+
+  let unlocked = false;
+  let selectedTix = 0, selectedPrice = 0;
+
+  const fmt  = n => '$' + Math.round(n).toLocaleString();
+  const fmtN = n => Math.round(n).toLocaleString();
+
+  /* ── Package selection ── */
+  function selectPkg(el, tix, price) {
+    document.querySelectorAll('.pkg-opt').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTix   = tix;
+    selectedPrice = price;
+
+    const label = tix === 1 ? '1 ticket' : tix + ' tickets';
+    document.getElementById('etAmountDisplay').textContent = '$' + price;
+    document.getElementById('etMemo').textContent = 'NDFC 5050 - ' + label + ' - Your Name';
+    document.getElementById('etEmail').textContent = ETRANSFER_EMAIL;
+    document.getElementById('osPkg').textContent   = tix === 1 ? 'Single ticket' : tix + '-pack';
+    document.getElementById('osTix').textContent   = tix + (tix === 1 ? ' ticket' : ' tickets');
+    document.getElementById('osTotal').textContent = '$' + price;
+    document.getElementById('fPkg').value  = tix === 1 ? 'Single ticket ($10)' : tix + '-pack ($' + price + ')';
+    document.getElementById('fTix').value  = tix;
+    document.getElementById('fAmt').value  = '$' + price;
+
+    document.getElementById('etransferBox').classList.add('show');
+    document.getElementById('buyerForm').classList.add('show');
+    setTimeout(() => document.getElementById('etransferBox').scrollIntoView({behavior:'smooth', block:'nearest'}), 80);
+  }
+
+  /* ── Copy helpers ── */
+  function copyField(id, btn) {
+    copyText(document.getElementById(id).textContent.trim(), btn);
+  }
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text).catch(() => {});
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }
+
+  /* ── Form submission ── */
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const btn  = document.getElementById('submitBtn');
+    const form = document.getElementById('ticketForm');
+    btn.disabled    = true;
+    btn.textContent = 'Submitting...';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('successCard').classList.add('show');
+      } else {
+        throw new Error('server error');
+      }
+    } catch {
+      btn.disabled    = false;
+      btn.textContent = 'Submit my ticket registration';
+      alert('Submission error. Please email us directly at ' + ETRANSFER_EMAIL + ' with your name, package, and e-transfer confirmation number.');
+    }
+  }
+
+  /* ── Admin jackpot updater ── */
+  const salesLog = [];
+
+  function updateTickets() {
+    const s1  = Math.max(0, parseInt(document.getElementById('inp1').value)  || 0);
+    const s5  = Math.max(0, parseInt(document.getElementById('inp5').value)  || 0);
+    const s15 = Math.max(0, parseInt(document.getElementById('inp15').value) || 0);
+    const s40 = Math.max(0, parseInt(document.getElementById('inp40').value) || 0);
+    const tix = Math.min(s1 + s5*5 + s15*15 + s40*40, TOTAL_TIKS);
+    const rev = s1*10 + s5*25 + s15*50 + s40*100;
+    const pct = tix / TOTAL_TIKS * 100;
+
+    // Update public display
+    document.getElementById('jackpotAmt').textContent = fmt(rev);
+    document.getElementById('winnerAmt').textContent  = fmt(rev / 2);
+    document.getElementById('orgAmt').textContent     = fmt(rev / 2);
+    document.getElementById('tixLeft').textContent    = fmtN(Math.max(0, TOTAL_TIKS - tix));
+    document.getElementById('soldCount').textContent  = fmtN(tix);
+    document.getElementById('progBar').style.width    = Math.min(100, pct) + '%';
+    document.getElementById('pctSold').textContent    = pct.toFixed(1) + '%';
+    document.getElementById('revToDate').textContent  = fmt(rev);
+
+    // Auto-fill the draw total sold field
+    document.getElementById('drawTotalSold').value = tix;
+    document.getElementById('drawAutofillNote').classList.add('show');
+
+    // Admin log (single line)
+    const ts = new Date();
+    const timeStr = ts.toLocaleTimeString();
+    const parts = [];
+    if (s1)  parts.push(s1  + ' single');
+    if (s5)  parts.push(s5  + ' \xd75-pack');
+    if (s15) parts.push(s15 + ' \xd715-pack');
+    if (s40) parts.push(s40 + ' \xd740-pack');
+    document.getElementById('adminLog').textContent = timeStr + ' \u2014 ' + (parts.length ? parts.join(', ') : 'reset') + '. Total ' + fmtN(tix) + ' tickets, pool ' + fmt(rev) + '.';
+
+    // Append to sales history table
+    salesLog.push({ time: timeStr, s1, s5, s15, s40, tix, rev });
+    renderSalesHistory();
+  }
+
+  function renderSalesHistory() {
+    const tbody = document.getElementById('salesHistoryBody');
+    tbody.innerHTML = '';
+    // Show newest first
+    [...salesLog].reverse().forEach(e => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="muted">${e.time}</td>
+        <td class="num">${e.s1}</td>
+        <td class="num">${e.s5}</td>
+        <td class="num">${e.s15}</td>
+        <td class="num">${e.s40}</td>
+        <td class="num">${fmtN(e.tix)}</td>
+        <td class="num">${fmt(e.rev)}</td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('salesHistory').classList.toggle('show', salesLog.length > 0);
+  }
+
+  function clearSalesHistory() {
+    salesLog.length = 0;
+    renderSalesHistory();
+  }
+
+  /* ── Admin gate ── */
+  function toggleAdminGate() {
+    if (unlocked) {
+      const p    = document.getElementById('adminPanel');
+      const open = p.classList.toggle('open');
+      document.getElementById('adminToggle').classList.toggle('open', open);
+      document.getElementById('adminDot').style.background = open ? '#E05050' : 'var(--muted2)';
+      document.getElementById('lockGate').classList.remove('show');
+    } else {
+      const g       = document.getElementById('lockGate');
+      const showing = g.classList.toggle('show');
+      document.getElementById('adminToggle').classList.toggle('open', showing);
+      document.getElementById('adminDot').style.background = showing ? 'var(--gold)' : 'var(--muted2)';
+      if (showing) setTimeout(() => document.getElementById('pwInput').focus(), 50);
+    }
+  }
+  function checkPw() {
+    if (document.getElementById('pwInput').value === ADMIN_PW) {
+      unlocked = true;
+      document.getElementById('lockGate').classList.remove('show');
+      document.getElementById('adminPanel').classList.add('open');
+      document.getElementById('adminToggle').classList.add('open');
+      document.getElementById('adminDot').style.background = '#E05050';
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwErr').textContent = '';
+    } else {
+      document.getElementById('pwErr').textContent = 'Incorrect password. Please try again.';
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwInput').focus();
+    }
+  }
+  function logout() {
+    unlocked = false;
+    document.getElementById('adminPanel').classList.remove('open');
+    document.getElementById('adminToggle').classList.remove('open');
+    document.getElementById('adminDot').style.background = 'var(--muted2)';
+  }
+
+  /* ── Share ── */
+  function copyLink() {
+    navigator.clipboard.writeText(SHARE_URL).catch(() => {});
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy link', 2200);
+  }
+  function shareMsg(type) {
+    if (type === 'sms')
+      window.open('sms:?body=' + encodeURIComponent(SHARE_MSG));
+    else if (type === 'email')
+      window.open('mailto:?subject=Support+NDFC+Barca+U14+Italy+2026+%E2%80%94+50%2F50+Draw&body=' + encodeURIComponent(SHARE_MSG));
+    else {
+      navigator.clipboard.writeText(SHARE_MSG).catch(() => {});
+      alert('Message copied to clipboard!');
+    }
+  }
+
+  /* ══════════════════════════════════════════
+     TICKET CONFIRMATION EMAILER
+  ══════════════════════════════════════════ */
+
+  // Init EmailJS once the page loads
+  window.addEventListener('load', () => {
+    if (typeof emailjs !== 'undefined') emailjs.init(EJS_PUBLIC_KEY);
+  });
+
+  function padNum(n) { return String(n).padStart(4, '0'); }
+
+  function getTicketNumbers() {
+    const pkgVal = document.getElementById('ePkg').value.split('|');
+    const count  = parseInt(pkgVal[0]) || 1;
+    const start  = parseInt(document.getElementById('eStartNum').value) || 1;
+    const nums   = [];
+    for (let i = 0; i < count; i++) nums.push(padNum(start + i));
+    return nums;
+  }
+
+  function syncPkgFields() {
+    const pkgVal  = document.getElementById('ePkg').value.split('|');
+    const price   = pkgVal[1];
+    const amtEl   = document.getElementById('eAmtPaid');
+    if (!amtEl.dataset.edited) amtEl.value = '$' + price;
+    buildPreview();
+  }
+
+  // Track if user manually edited amount
+  document.addEventListener('DOMContentLoaded', () => {
+    const amtEl = document.getElementById('eAmtPaid');
+    if (amtEl) {
+      amtEl.addEventListener('focus', () => amtEl.dataset.edited = 'true');
+      syncPkgFields();
+    }
+  });
+
+  function buildPreview() {
+    const first   = (document.getElementById('eBuyerFirst').value || '').trim();
+    const last    = (document.getElementById('eBuyerLast').value  || '').trim();
+    const email   = (document.getElementById('eBuyerEmail').value || '').trim();
+    const pkgSel  = document.getElementById('ePkg');
+    const pkgText = pkgSel.options[pkgSel.selectedIndex].text;
+    const amt     = (document.getElementById('eAmtPaid').value    || '').trim();
+    const nums    = getTicketNumbers();
+    const start   = parseInt(document.getElementById('eStartNum').value) || 1;
+    const nextNum = start + nums.length;
+
+    // Render ticket number chips
+    const chipWrap = document.getElementById('tixNumDisplay');
+    chipWrap.innerHTML = nums.map(n => `<span class="tix-num">#${n}</span>`).join('');
+    document.getElementById('tixNextHint').textContent =
+      `Next buyer's starting number: ${padNum(nextNum)} (${nextNum})`;
+
+    // Enable/disable send button
+    const ready = first && last && email && nums.length > 0;
+    document.getElementById('sendEmailBtn').disabled = !ready;
+
+    if (!first) { document.getElementById('emailPreview').classList.remove('show'); return; }
+
+    const fullName    = first + ' ' + last;
+    const ticketList  = nums.length === 1
+      ? `Your ticket number: #${nums[0]}`
+      : `Your ticket numbers:\n${nums.map(n => `  #${n}`).join('\n')}`;
+
+    const body = `Hi ${first},
+
+Great news — your payment has been verified and your official ticket numbers for the NDFC Barca U14 Italy 2026 · 50/50 Jackpot Draw are confirmed!
+
+${ticketList}
+
+Order details:
+  Name:       ${fullName}
+  Package:    ${pkgText}
+  Amount paid: ${amt || 'see e-transfer'}
+  Draw date:  August 31, 2026
+
+The draw will take place on August 31, 2026. The winning ticket will be drawn live and the winner will receive 50% of the total jackpot. We will contact you directly if your number is drawn.
+
+Thank you so much for your support — every ticket brings our players one step closer to Italy!
+
+Go NDFC Barca! ⚽
+
+– NDFC Barca U14 Fundraising Team
+${ETRANSFER_EMAIL}`;
+
+    document.getElementById('emailBody').textContent = body;
+    document.getElementById('emailPreview').classList.add('show');
+  }
+
+  async function sendTicketEmail() {
+    const first  = document.getElementById('eBuyerFirst').value.trim();
+    const last   = document.getElementById('eBuyerLast').value.trim();
+    const email  = document.getElementById('eBuyerEmail').value.trim();
+    const body   = document.getElementById('emailBody').textContent;
+    const logEl  = document.getElementById('emailerLog');
+    const btn    = document.getElementById('sendEmailBtn');
+
+    if (!first || !last || !email) { alert('Please fill in name and email.'); return; }
+    if (EJS_PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
+      logEl.className = 'emailer-log show err';
+      logEl.textContent = 'EmailJS not configured yet. Update EJS_PUBLIC_KEY, EJS_SERVICE_ID, and EJS_TEMPLATE_ID in the CONFIG section of the HTML file.';
+      return;
+    }
+
+    btn.disabled    = true;
+    btn.textContent = 'Sending...';
+    logEl.className = 'emailer-log show';
+    logEl.textContent = 'Sending email...';
+
+    try {
+      await emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE_ID, {
+        to_email : email,
+        to_name  : first + ' ' + last,
+        subject  : 'Your NDFC 50/50 ticket numbers are confirmed!',
+        message  : body
+      });
+      logEl.className = 'emailer-log show ok';
+      const nums = getTicketNumbers();
+      logEl.textContent = `Sent to ${email} — tickets #${nums[0]} to #${nums[nums.length-1]}. Next starting number: ${parseInt(document.getElementById('eStartNum').value) + nums.length}.`;
+      // Auto-advance starting number for next buyer
+      document.getElementById('eStartNum').value = parseInt(document.getElementById('eStartNum').value) + nums.length;
+      // Clear buyer fields
+      ['eBuyerFirst','eBuyerLast','eBuyerEmail'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('eAmtPaid').dataset.edited = '';
+      syncPkgFields();
+      document.getElementById('emailPreview').classList.remove('show');
+      btn.textContent = 'Send ticket confirmation email';
+    } catch(err) {
+      logEl.className = 'emailer-log show err';
+      logEl.textContent = 'Send failed: ' + (err.text || err.message || JSON.stringify(err)) + '. Check your EmailJS config.';
+      btn.disabled    = false;
+      btn.textContent = 'Send ticket confirmation email';
+    }
+  }
+
+  /* ══════════════════════════════════════════
+     DRAW WINNER
+  ══════════════════════════════════════════ */
+  let drawComplete = false;
+
+  function runDraw() {
+    const totalSold = parseInt(document.getElementById('drawTotalSold').value) || 0;
+    if (totalSold < 1) { alert('Please enter the total number of tickets sold before drawing.'); return; }
+    if (totalSold > 5000) { alert('Total sold cannot exceed 5,000.'); return; }
+    if (drawComplete) { if (!confirm('A winner has already been drawn. Draw again?')) return; }
+
+    const btn      = document.getElementById('drawBtn');
+    const resultEl = document.getElementById('drawResult');
+    const numEl    = document.getElementById('drawWinningNum');
+    const nameEl   = document.getElementById('drawWinnerName');
+    const noteEl   = document.getElementById('drawWinnerNote');
+    const confetti = document.getElementById('drawConfetti');
+    const labelEl  = document.getElementById('drawEventLabel');
+
+    const eventNote = document.getElementById('drawEventNote').value.trim() || 'NDFC Barca U14 · Italy 2026 · 50/50 Draw';
+    labelEl.textContent = eventNote;
+
+    btn.disabled = true;
+    drawComplete = false;
+    confetti.classList.remove('show');
+    nameEl.textContent = '';
+    noteEl.textContent = '';
+    numEl.classList.add('spinning');
+    resultEl.classList.add('show');
+
+    const SPIN_DURATION = 3500;
+    const SPIN_FAST     = 55;
+    const SPIN_SLOW     = 300;
+    const winner        = Math.floor(Math.random() * totalSold) + 1;
+    const winnerStr     = padNum(winner);
+    const startTime     = Date.now();
+
+    function tick() {
+      const elapsed  = Date.now() - startTime;
+      const progress = Math.min(elapsed / SPIN_DURATION, 1);
+      const interval = SPIN_FAST + (SPIN_SLOW - SPIN_FAST) * (progress * progress);
+
+      if (progress < 1) {
+        numEl.textContent = padNum(Math.floor(Math.random() * totalSold) + 1);
+        setTimeout(tick, interval);
+      } else {
+        numEl.classList.remove('spinning');
+        numEl.textContent = '#' + winnerStr;
+        drawComplete      = true;
+        btn.disabled      = false;
+        const ts          = new Date().toLocaleString();
+        nameEl.textContent = 'Winning ticket: #' + winnerStr;
+        noteEl.textContent = 'Drawn from ' + totalSold.toLocaleString() + ' sold tickets \u00b7 ' + ts;
+        confetti.classList.add('show');
+      }
+    }
+
+    setTimeout(tick, 50);
+  }
+
+  function resetDraw() {
+    drawComplete = false;
+    document.getElementById('drawResult').classList.remove('show');
+    document.getElementById('drawWinningNum').textContent = '----';
+    document.getElementById('drawWinningNum').classList.remove('spinning');
+    document.getElementById('drawConfetti').classList.remove('show');
+    document.getElementById('drawWinnerName').textContent = '';
+    document.getElementById('drawWinnerNote').textContent = '';
+    document.getElementById('drawBtn').disabled = false;
+  }
+
+</script>
+</body>
+</html>
