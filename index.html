@@ -666,7 +666,7 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
      CONFIG — update these values before going live
   ═══════════════════════════════════════════ */
   const ADMIN_PW        = 'ndfc2025';
-  const ETRANSFER_EMAIL = 'jay@jayshiv.ca';
+  const ETRANSFER_EMAIL = 'jay' + '\u0040' + 'jayshiv.ca';
   const SHARE_URL       = 'https://ndfc-2027.vercel.app/';
   const SHARE_MSG       = 'Support the NDFC Barca U14 team on their trip to Italy!\nBuy a 50/50 raffle ticket — the winner takes half the pot. Tickets from just $10.\nDraw closes Aug 31, 2027.\n\n' + SHARE_URL;
   const TOTAL_TIKS      = 5000;
@@ -946,7 +946,11 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
   nextTicketRef.on('value', snap => {
     const next = snap.exists() ? snap.val() : 1;
     const el = document.getElementById('eStartNum');
-    if (el) { el.value = next; buildPreview(); }
+    if (el) {
+      el.value = next;
+      // Only rebuild preview if admin panel is open and buyer fields exist
+      if (unlocked && document.getElementById('eBuyerFirst')) buildPreview();
+    }
   });
 
   function padNum(n) { return String(n).padStart(4, '0'); }
@@ -1154,7 +1158,7 @@ ${ETRANSFER_EMAIL}`;
 
   /* Build email addresses dynamically so Cloudflare cannot detect or mangle them */
   (function() {
-    const contact = 'ndfcbarca' + '@' + 'gmail.com';
+    const contact = 'ndfcbarca' + '\u0040' + 'gmail.com';
     const cl = document.getElementById('contactLink');
     if (cl) { cl.href = 'mailto:' + contact; cl.textContent = contact; }
     const et = document.getElementById('etEmail');
