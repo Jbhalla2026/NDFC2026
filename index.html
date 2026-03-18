@@ -1129,14 +1129,6 @@ ${ETRANSFER_EMAIL}`;
       btn.disabled    = false;
       btn.textContent = 'Send ticket confirmation email';
     }
-      document.getElementById('emailPreview').classList.remove('show');
-      btn.textContent = 'Send ticket confirmation email';
-    } catch(err) {
-      logEl.className = 'emailer-log show err';
-      logEl.textContent = 'Send failed: ' + (err.text || err.message || JSON.stringify(err)) + '. Check your EmailJS config.';
-      btn.disabled    = false;
-      btn.textContent = 'Send ticket confirmation email';
-    }
   }
 
   /* ══════════════════════════════════════════
