@@ -654,8 +654,9 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     appId            : "1:52807188546:web:381733d2e5f5866139addb"
   };
   firebase.initializeApp(firebaseConfig);
-  const db      = firebase.database();
-  const tickRef = db.ref('tickets');
+  const db         = firebase.database();
+  const tickRef    = db.ref('tickets');
+  const historyRef = db.ref('salesHistory');
 
   /* ═══════════════════════════════════════════
      CONFIG — update these values before going live
@@ -710,6 +711,29 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
   // Subscribe — fires instantly on page load AND every time admin updates
   tickRef.on('value', snap => {
     if (snap.exists()) applyTicketData(snap.val());
+  });
+
+  // Subscribe to sales history — rebuilds table on every device instantly
+  historyRef.on('value', snap => {
+    const tbody = document.getElementById('salesHistoryBody');
+    tbody.innerHTML = '';
+    const entries = [];
+    if (snap.exists()) {
+      snap.forEach(child => entries.push(child.val()));
+      entries.reverse().forEach(e => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="muted">${e.time}</td>
+          <td class="num">${e.s1}</td>
+          <td class="num">${e.s5}</td>
+          <td class="num">${e.s15}</td>
+          <td class="num">${e.s40}</td>
+          <td class="num">${fmtN(e.tix)}</td>
+          <td class="num">${fmt(e.rev)}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+    document.getElementById('salesHistory').classList.toggle('show', entries.length > 0);
   });
 
   /* ── Package selection ── */
@@ -773,7 +797,7 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
   }
 
   /* ── Admin jackpot updater — writes to Firebase ── */
-  const salesLog = [];
+  const salesLog = []; // kept locally just for the .finally guard
 
   function updateTickets() {
     const s1  = Math.max(0, parseInt(document.getElementById('inp1').value)  || 0);
@@ -789,50 +813,34 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     if (s15) parts.push(s15 + ' \xd715-pack');
     if (s40) parts.push(s40 + ' \xd740-pack');
 
-    // Update log immediately so user gets instant feedback
     document.getElementById('adminLog').textContent = timeStr + ' \u2014 Saving to Firebase\u2026';
-
-    // Guard flag stops listener from overwriting inputs during save
     isAdminUpdating = true;
 
-    // Write to Firebase — triggers applyTicketData() on ALL open browsers instantly
-    tickRef.set({ s1, s5, s15, s40, updatedAt: new Date().toISOString() })
+    // Write current totals
+    const saveTickets = tickRef.set({ s1, s5, s15, s40, updatedAt: new Date().toISOString() });
+
+    // Push a new history entry (push() creates a unique key each time)
+    const saveHistory = historyRef.push({ time: timeStr, s1, s5, s15, s40, tix, rev });
+
+    Promise.all([saveTickets, saveHistory])
       .then(() => {
         document.getElementById('adminLog').textContent = timeStr + ' \u2014 \u2705 Saved! ' + (parts.length ? parts.join(', ') : 'reset') + '. Total ' + fmtN(tix) + ' tickets \u00b7 Pool ' + fmt(rev) + '.';
-        salesLog.push({ time: timeStr, s1, s5, s15, s40, tix, rev });
-        renderSalesHistory();
       })
       .catch(err => {
         document.getElementById('adminLog').textContent = '\u274c Firebase save failed: ' + err.message;
       })
       .finally(() => {
-        // Release guard after 1 second
         setTimeout(() => { isAdminUpdating = false; }, 1000);
       });
   }
 
   function renderSalesHistory() {
-    const tbody = document.getElementById('salesHistoryBody');
-    tbody.innerHTML = '';
-    // Show newest first
-    [...salesLog].reverse().forEach(e => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td class="muted">${e.time}</td>
-        <td class="num">${e.s1}</td>
-        <td class="num">${e.s5}</td>
-        <td class="num">${e.s15}</td>
-        <td class="num">${e.s40}</td>
-        <td class="num">${fmtN(e.tix)}</td>
-        <td class="num">${fmt(e.rev)}</td>`;
-      tbody.appendChild(tr);
-    });
-    document.getElementById('salesHistory').classList.toggle('show', salesLog.length > 0);
+    // No-op — rendering is now handled by the historyRef Firebase listener above
   }
 
   function clearSalesHistory() {
-    salesLog.length = 0;
-    renderSalesHistory();
+    // Remove all history entries from Firebase
+    historyRef.remove().catch(err => alert('Could not clear history: ' + err.message));
   }
 
   /* ── Admin gate ── */
