@@ -377,7 +377,7 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
           <div class="et-step-body">
             <div class="et-step-label">Send to this e-transfer email</div>
             <div class="et-copy-row">
-              <div class="et-val" id="etEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cca2a8aaafaeadbeafada5b8ada0b58caba1ada5a0e2afa3a1">[email&#160;protected]</a></div>
+              <div class="et-val" id="etEmail"></div>
               <button class="copy-mini" onclick="copyField('etEmail',this)">Copy</button>
             </div>
             <div class="et-note">Open your banking app &rarr; Interac e-Transfer &rarr; Send money &rarr; enter the address above.</div>
@@ -638,12 +638,12 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
   <div class="footer-note">
     Maximum jackpot at full sell-out: <strong style="color:#FFFFFF">$25,000</strong> &bull; Winner: $12,500 &bull; Italy fund: $12,500<br>
     All proceeds supporting the NDFC Barca U14 team trip to Italy &bull; Draw closes August 31, 2026<br><br>
-    <span style="color:var(--muted)">For more information or support contact</span> <a href="/cdn-cgi/l/email-protection#a9c7cdcfcacbc8dbcac8e9cec4c8c0c587cac6c4" style="color:var(--ndfc-green);text-decoration:none;font-weight:500"><span class="__cf_email__" data-cfemail="fd93999b9e9f9c8f9e9cbd9a909c9491d39e9290">[email&#160;protected]</span></a>
+    <span style="color:var(--muted)">For more information or support contact</span> <a id="contactLink" style="color:var(--ndfc-green);text-decoration:none;font-weight:500"></a>
   </div>
 
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   /* ═══════════════════════════════════════════
      FIREBASE — live jackpot sync for all visitors
   ═══════════════════════════════════════════ */
@@ -1132,4 +1132,21 @@ ${ETRANSFER_EMAIL}`;
     document.getElementById('drawResult').classList.remove('show');
     document.getElementById('drawWinningNum').textContent = '----';
     document.getElementById('drawWinningNum').classList.remove('spinning');
-    document.getElementById('drawConfetti')
+    document.getElementById('drawConfetti').classList.remove('show');
+    document.getElementById('drawWinnerName').textContent = '';
+    document.getElementById('drawWinnerNote').textContent = '';
+    document.getElementById('drawBtn').disabled = false;
+  }
+
+  /* Build email addresses dynamically so Cloudflare cannot detect or mangle them */
+  (function() {
+    const contact = 'ndfcbarca' + '@' + 'gmail.com';
+    const cl = document.getElementById('contactLink');
+    if (cl) { cl.href = 'mailto:' + contact; cl.textContent = contact; }
+    const et = document.getElementById('etEmail');
+    if (et && !et.textContent.trim()) et.textContent = ETRANSFER_EMAIL;
+  })();
+
+</script>
+</body>
+</html>
