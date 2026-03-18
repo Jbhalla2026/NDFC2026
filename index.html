@@ -1209,11 +1209,23 @@ ${ETRANSFER_EMAIL}`;
             const infoDetails = document.getElementById('drawWinnerDetails');
             if (!hsnap.exists()) return;
             let found = null;
+            const winnerNum = parseInt(winnerStr);
             hsnap.forEach(child => {
               const e = child.val();
+              let start = null, end = null;
+              // New format: ticketStart / ticketEnd stored as integers
               if (e.ticketStart && e.ticketEnd) {
-                const n = parseInt(winnerStr);
-                if (n >= e.ticketStart && n <= e.ticketEnd) { found = e; }
+                start = parseInt(e.ticketStart);
+                end   = parseInt(e.ticketEnd);
+              }
+              // Old format: tickets stored as "0001-0015" string
+              else if (e.tickets && e.tickets.indexOf('-') > -1) {
+                const parts = e.tickets.split('-');
+                start = parseInt(parts[0]);
+                end   = parseInt(parts[1]);
+              }
+              if (start !== null && end !== null && winnerNum >= start && winnerNum <= end) {
+                found = e;
               }
               return false;
             });
@@ -1221,7 +1233,7 @@ ${ETRANSFER_EMAIL}`;
               infoDetails.innerHTML =
                 '<strong style="color:var(--text)">' + (found.buyer || '—') + '</strong><br>' +
                 '<span style="color:var(--muted)">' + (found.email || '—') + '</span><br>' +
-                '<span style="color:var(--muted);font-size:.78rem">Package: ' + (found.pkg || '—') + ' &bull; Tickets: #' + (found.tickets || '—') + '</span>';
+                '<span style="color:var(--muted);font-size:.78rem">Package: ' + (found.pkg || '—') + ' &bull; Tickets: #' + (found.tickets || found.ticketStart + '-' + found.ticketEnd || '—') + '</span>';
               infoBox.style.display = 'block';
             } else {
               infoDetails.innerHTML = '<span style="color:var(--muted)">Ticket #' + winnerStr + ' — buyer details not found in history. Check your sales log.</span>';
