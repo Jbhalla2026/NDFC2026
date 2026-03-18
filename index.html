@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -638,24 +640,35 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
 
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+  /* ═══════════════════════════════════════════
+     FIREBASE — live jackpot sync for all visitors
+  ═══════════════════════════════════════════ */
+  const firebaseConfig = {
+    apiKey           : "AIzaSyBKQwswP5EyGCPj0XNJIU9NCgVfAYyOqlQ",
+    authDomain       : "ndfc-barca-5050.firebaseapp.com",
+    databaseURL      : "https://ndfc-barca-5050-default-rtdb.firebaseio.com",
+    projectId        : "ndfc-barca-5050",
+    storageBucket    : "ndfc-barca-5050.firebasestorage.app",
+    messagingSenderId: "52807188546",
+    appId            : "1:52807188546:web:381733d2e5f5866139addb"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db      = firebase.database();
+  const tickRef = db.ref('tickets');
+
   /* ═══════════════════════════════════════════
      CONFIG — update these values before going live
   ═══════════════════════════════════════════ */
-  const ADMIN_PW        = 'ndfc2025';                  // change to your preferred password
-  const ETRANSFER_EMAIL = 'jay@jayshiv.ca';  // replace with real e-transfer email
+  const ADMIN_PW        = 'ndfc2025';
+  const ETRANSFER_EMAIL = 'jay@jayshiv.ca';
   const SHARE_URL       = 'https://ndfc-2026.vercel.app/';
   const SHARE_MSG       = 'Support the NDFC Barca U14 team on their trip to Italy!\nBuy a 50/50 raffle ticket — the winner takes half the pot. Tickets from just $10.\nDraw closes Aug 31, 2026.\n\n' + SHARE_URL;
   const TOTAL_TIKS      = 5000;
 
-  /* ── EmailJS config (sign up free at emailjs.com) ──
-     1. Go to emailjs.com → sign up → Add a Service (connect Gmail)
-     2. Create an Email Template — use these variables in the template body:
-        {{to_email}}, {{to_name}}, {{subject}}, {{message}}
-     3. Copy your Public Key, Service ID, and Template ID below             */
-  const EJS_PUBLIC_KEY  = '7koDYtcFhB_xaIWZY';   // e.g. 'user_aBcDeFgHiJkL'
-  const EJS_SERVICE_ID  = 'service_1dyt9bj';            // e.g. 'service_abc123'
-  const EJS_TEMPLATE_ID = 'template_xt2yapb';           // e.g. 'template_xyz789'
+  const EJS_PUBLIC_KEY  = '7koDYtcFhB_xaIWZY';
+  const EJS_SERVICE_ID  = 'service_1dyt9bj';
+  const EJS_TEMPLATE_ID = 'template_xt2yapb';
   /* ═══════════════════════════════════════════ */
 
   let unlocked = false;
@@ -663,6 +676,39 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
 
   const fmt  = n => '$' + Math.round(n).toLocaleString();
   const fmtN = n => Math.round(n).toLocaleString();
+
+  /* ── Firebase: listen for live updates and push to all visitors ── */
+  function applyTicketData(data) {
+    const s1  = data.s1  || 0;
+    const s5  = data.s5  || 0;
+    const s15 = data.s15 || 0;
+    const s40 = data.s40 || 0;
+    const tix = Math.min(s1 + s5*5 + s15*15 + s40*40, TOTAL_TIKS);
+    const rev = s1*10 + s5*25 + s15*50 + s40*100;
+    const pct = tix / TOTAL_TIKS * 100;
+    document.getElementById('jackpotAmt').textContent = fmt(rev);
+    document.getElementById('winnerAmt').textContent  = fmt(rev / 2);
+    document.getElementById('orgAmt').textContent     = fmt(rev / 2);
+    document.getElementById('tixLeft').textContent    = fmtN(Math.max(0, TOTAL_TIKS - tix));
+    document.getElementById('soldCount').textContent  = fmtN(tix);
+    document.getElementById('progBar').style.width    = Math.min(100, pct) + '%';
+    document.getElementById('pctSold').textContent    = pct.toFixed(1) + '%';
+    document.getElementById('revToDate').textContent  = fmt(rev);
+    document.getElementById('drawTotalSold').value    = tix;
+    if (tix > 0) document.getElementById('drawAutofillNote').classList.add('show');
+    // Sync admin inputs if panel is open
+    if (unlocked) {
+      document.getElementById('inp1').value  = s1;
+      document.getElementById('inp5').value  = s5;
+      document.getElementById('inp15').value = s15;
+      document.getElementById('inp40').value = s40;
+    }
+  }
+
+  // Subscribe — fires instantly on page load AND every time admin updates
+  tickRef.on('value', snap => {
+    if (snap.exists()) applyTicketData(snap.val());
+  });
 
   /* ── Package selection ── */
   function selectPkg(el, tix, price) {
@@ -724,7 +770,7 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     }
   }
 
-  /* ── Admin jackpot updater ── */
+  /* ── Admin jackpot updater — writes to Firebase ── */
   const salesLog = [];
 
   function updateTickets() {
@@ -734,35 +780,23 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     const s40 = Math.max(0, parseInt(document.getElementById('inp40').value) || 0);
     const tix = Math.min(s1 + s5*5 + s15*15 + s40*40, TOTAL_TIKS);
     const rev = s1*10 + s5*25 + s15*50 + s40*100;
-    const pct = tix / TOTAL_TIKS * 100;
 
-    // Update public display
-    document.getElementById('jackpotAmt').textContent = fmt(rev);
-    document.getElementById('winnerAmt').textContent  = fmt(rev / 2);
-    document.getElementById('orgAmt').textContent     = fmt(rev / 2);
-    document.getElementById('tixLeft').textContent    = fmtN(Math.max(0, TOTAL_TIKS - tix));
-    document.getElementById('soldCount').textContent  = fmtN(tix);
-    document.getElementById('progBar').style.width    = Math.min(100, pct) + '%';
-    document.getElementById('pctSold').textContent    = pct.toFixed(1) + '%';
-    document.getElementById('revToDate').textContent  = fmt(rev);
-
-    // Auto-fill the draw total sold field
-    document.getElementById('drawTotalSold').value = tix;
-    document.getElementById('drawAutofillNote').classList.add('show');
-
-    // Admin log (single line)
-    const ts = new Date();
-    const timeStr = ts.toLocaleTimeString();
-    const parts = [];
-    if (s1)  parts.push(s1  + ' single');
-    if (s5)  parts.push(s5  + ' \xd75-pack');
-    if (s15) parts.push(s15 + ' \xd715-pack');
-    if (s40) parts.push(s40 + ' \xd740-pack');
-    document.getElementById('adminLog').textContent = timeStr + ' \u2014 ' + (parts.length ? parts.join(', ') : 'reset') + '. Total ' + fmtN(tix) + ' tickets, pool ' + fmt(rev) + '.';
-
-    // Append to sales history table
-    salesLog.push({ time: timeStr, s1, s5, s15, s40, tix, rev });
-    renderSalesHistory();
+    // Write to Firebase — this triggers applyTicketData() on ALL open browsers instantly
+    tickRef.set({ s1, s5, s15, s40, updatedAt: new Date().toISOString() })
+      .then(() => {
+        const timeStr = new Date().toLocaleTimeString();
+        const parts = [];
+        if (s1)  parts.push(s1  + ' single');
+        if (s5)  parts.push(s5  + ' \xd75-pack');
+        if (s15) parts.push(s15 + ' \xd715-pack');
+        if (s40) parts.push(s40 + ' \xd740-pack');
+        document.getElementById('adminLog').textContent = timeStr + ' \u2014 Saved to Firebase. ' + (parts.length ? parts.join(', ') : 'reset') + '. Total ' + fmtN(tix) + ' tickets, pool ' + fmt(rev) + '.';
+        salesLog.push({ time: timeStr, s1, s5, s15, s40, tix, rev });
+        renderSalesHistory();
+      })
+      .catch(err => {
+        document.getElementById('adminLog').textContent = 'Firebase save failed: ' + err.message + '. Check your database rules.';
+      });
   }
 
   function renderSalesHistory() {
