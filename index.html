@@ -678,6 +678,8 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
   const fmtN = n => Math.round(n).toLocaleString();
 
   /* ── Firebase: listen for live updates and push to all visitors ── */
+  let isAdminUpdating = false; // guard so listener doesn't fight admin inputs
+
   function applyTicketData(data) {
     const s1  = data.s1  || 0;
     const s5  = data.s5  || 0;
@@ -696,8 +698,8 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     document.getElementById('revToDate').textContent  = fmt(rev);
     document.getElementById('drawTotalSold').value    = tix;
     if (tix > 0) document.getElementById('drawAutofillNote').classList.add('show');
-    // Sync admin inputs if panel is open
-    if (unlocked) {
+    // Only sync admin inputs when admin is NOT mid-update
+    if (unlocked && !isAdminUpdating) {
       document.getElementById('inp1').value  = s1;
       document.getElementById('inp5').value  = s5;
       document.getElementById('inp15').value = s15;
@@ -780,22 +782,32 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     const s40 = Math.max(0, parseInt(document.getElementById('inp40').value) || 0);
     const tix = Math.min(s1 + s5*5 + s15*15 + s40*40, TOTAL_TIKS);
     const rev = s1*10 + s5*25 + s15*50 + s40*100;
+    const timeStr = new Date().toLocaleTimeString();
+    const parts = [];
+    if (s1)  parts.push(s1  + ' single');
+    if (s5)  parts.push(s5  + ' \xd75-pack');
+    if (s15) parts.push(s15 + ' \xd715-pack');
+    if (s40) parts.push(s40 + ' \xd740-pack');
 
-    // Write to Firebase — this triggers applyTicketData() on ALL open browsers instantly
+    // Update log immediately so user gets instant feedback
+    document.getElementById('adminLog').textContent = timeStr + ' \u2014 Saving to Firebase\u2026';
+
+    // Guard flag stops listener from overwriting inputs during save
+    isAdminUpdating = true;
+
+    // Write to Firebase — triggers applyTicketData() on ALL open browsers instantly
     tickRef.set({ s1, s5, s15, s40, updatedAt: new Date().toISOString() })
       .then(() => {
-        const timeStr = new Date().toLocaleTimeString();
-        const parts = [];
-        if (s1)  parts.push(s1  + ' single');
-        if (s5)  parts.push(s5  + ' \xd75-pack');
-        if (s15) parts.push(s15 + ' \xd715-pack');
-        if (s40) parts.push(s40 + ' \xd740-pack');
-        document.getElementById('adminLog').textContent = timeStr + ' \u2014 Saved to Firebase. ' + (parts.length ? parts.join(', ') : 'reset') + '. Total ' + fmtN(tix) + ' tickets, pool ' + fmt(rev) + '.';
+        document.getElementById('adminLog').textContent = timeStr + ' \u2014 \u2705 Saved! ' + (parts.length ? parts.join(', ') : 'reset') + '. Total ' + fmtN(tix) + ' tickets \u00b7 Pool ' + fmt(rev) + '.';
         salesLog.push({ time: timeStr, s1, s5, s15, s40, tix, rev });
         renderSalesHistory();
       })
       .catch(err => {
-        document.getElementById('adminLog').textContent = 'Firebase save failed: ' + err.message + '. Check your database rules.';
+        document.getElementById('adminLog').textContent = '\u274c Firebase save failed: ' + err.message;
+      })
+      .finally(() => {
+        // Release guard after 1 second
+        setTimeout(() => { isAdminUpdating = false; }, 1000);
       });
   }
 
