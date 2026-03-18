@@ -719,7 +719,10 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     tbody.innerHTML = '';
     const entries = [];
     if (snap.exists()) {
-      snap.forEach(child => entries.push(child.val()));
+      snap.forEach(child => {
+        entries.push(child.val());
+        return false; // must return false in Firebase forEach to continue iterating
+      });
       entries.reverse().forEach(e => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
