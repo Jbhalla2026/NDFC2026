@@ -549,6 +549,7 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
           <tr>
             <th>Time</th>
             <th>Buyer</th>
+            <th>Email</th>
             <th>Package</th>
             <th>Tickets</th>
             <th>Total sold</th>
@@ -641,6 +642,10 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
         <div class="draw-winner-name" id="drawWinnerName"></div>
         <div class="draw-winner-note" id="drawWinnerNote"></div>
         <div class="draw-confetti" id="drawConfetti">★ ★ ★ ★ ★</div>
+        <div id="drawWinnerInfo" style="display:none;background:rgba(46,139,58,.12);border:1px solid var(--ndfc-green);border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem;text-align:left">
+          <div style="font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ndfc-green);margin-bottom:.5rem">Winner details</div>
+          <div id="drawWinnerDetails" style="font-size:.85rem;color:var(--text);line-height:1.7"></div>
+        </div>
         <div style="margin-top:.9rem">
           <button class="draw-reset show" onclick="resetDraw()">Reset draw</button>
         </div>
@@ -746,6 +751,7 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
         tr.innerHTML = `
           <td class="muted">${e.time}</td>
           <td style="color:var(--text)">${e.buyer || '—'}</td>
+          <td class="muted" style="font-size:.7rem">${e.email || '—'}</td>
           <td class="num">${e.pkg || '—'}</td>
           <td class="num">${e.tickets ? '#' + e.tickets : '—'}</td>
           <td class="num">${fmtN(e.tix)}</td>
@@ -1111,7 +1117,7 @@ ${ETRANSFER_EMAIL}`;
       await Promise.all([
         nextTicketRef.set(nextNum),
         tickRef.set({ s1: cur.s1, s5: cur.s5, s15: cur.s15, s40: cur.s40, updatedAt: new Date().toISOString() }),
-        historyRef.push({ time: timeStr, buyer: first + ' ' + last, pkg: tixCount + '-ticket ($' + pkgPrice + ')', tickets: nums[0] + '-' + nums[nums.length-1], s1: cur.s1, s5: cur.s5, s15: cur.s15, s40: cur.s40, tix, rev })
+        historyRef.push({ time: timeStr, buyer: first + ' ' + last, email: email, pkg: tixCount + '-ticket ($' + pkgPrice + ')', tickets: nums[0] + '-' + nums[nums.length-1], ticketStart: parseInt(document.getElementById('eStartNum').value), ticketEnd: parseInt(document.getElementById('eStartNum').value) + nums.length - 1, s1: cur.s1, s5: cur.s5, s15: cur.s15, s40: cur.s40, tix, rev })
       ]);
 
       logEl.className = 'emailer-log show ok';
@@ -1196,6 +1202,32 @@ ${ETRANSFER_EMAIL}`;
           nameEl.textContent = 'Winning ticket: #' + winnerStr;
           noteEl.textContent = 'Drawn from ' + totalSold.toLocaleString() + ' issued tickets \u00b7 ' + ts;
           confetti.classList.add('show');
+
+          // Look up who holds the winning ticket in the sales history
+          historyRef.once('value').then(hsnap => {
+            const infoBox     = document.getElementById('drawWinnerInfo');
+            const infoDetails = document.getElementById('drawWinnerDetails');
+            if (!hsnap.exists()) return;
+            let found = null;
+            hsnap.forEach(child => {
+              const e = child.val();
+              if (e.ticketStart && e.ticketEnd) {
+                const n = parseInt(winnerStr);
+                if (n >= e.ticketStart && n <= e.ticketEnd) { found = e; }
+              }
+              return false;
+            });
+            if (found) {
+              infoDetails.innerHTML =
+                '<strong style="color:var(--text)">' + (found.buyer || '—') + '</strong><br>' +
+                '<span style="color:var(--muted)">' + (found.email || '—') + '</span><br>' +
+                '<span style="color:var(--muted);font-size:.78rem">Package: ' + (found.pkg || '—') + ' &bull; Tickets: #' + (found.tickets || '—') + '</span>';
+              infoBox.style.display = 'block';
+            } else {
+              infoDetails.innerHTML = '<span style="color:var(--muted)">Ticket #' + winnerStr + ' — buyer details not found in history. Check your sales log.</span>';
+              infoBox.style.display = 'block';
+            }
+          });
         }
       }
       setTimeout(tick, 50);
@@ -1213,6 +1245,8 @@ ${ETRANSFER_EMAIL}`;
     document.getElementById('drawConfetti').classList.remove('show');
     document.getElementById('drawWinnerName').textContent = '';
     document.getElementById('drawWinnerNote').textContent = '';
+    document.getElementById('drawWinnerInfo').style.display = 'none';
+    document.getElementById('drawWinnerDetails').innerHTML = '';
     document.getElementById('drawBtn').disabled = false;
   }
 
