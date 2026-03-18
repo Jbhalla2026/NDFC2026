@@ -519,10 +519,33 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
       <button class="logout-btn" onclick="logout()">Lock panel</button>
     </div>
     <div class="agrid">
-      <div class="afield"><label>Single tickets <span class="atag">$10 each</span></label><input type="number" id="inp1" min="0" value="0"></div>
-      <div class="afield"><label>5-packs sold <span class="atag">$25 / pack</span></label><input type="number" id="inp5" min="0" value="0"></div>
-      <div class="afield"><label>15-packs sold <span class="atag">$50 / pack</span></label><input type="number" id="inp15" min="0" value="0"></div>
-      <div class="afield"><label>40-packs sold <span class="atag">$100 / pack</span></label><input type="number" id="inp40" min="0" value="0"></div>
+      <div class="afield"><label>Single tickets sold <span class="atag">$10 each</span></label>
+        <div style="display:flex;gap:.4rem">
+          <input type="number" id="inp1" min="0" value="0" style="flex:1">
+          <button onclick="addToField('inp1')" style="background:var(--ndfc-green);color:#fff;border:none;border-radius:7px;padding:.4rem .7rem;font-size:.75rem;cursor:pointer;white-space:nowrap">+ Add</button>
+        </div>
+      </div>
+      <div class="afield"><label>5-packs sold <span class="atag">$25 / pack</span></label>
+        <div style="display:flex;gap:.4rem">
+          <input type="number" id="inp5" min="0" value="0" style="flex:1">
+          <button onclick="addToField('inp5')" style="background:var(--ndfc-green);color:#fff;border:none;border-radius:7px;padding:.4rem .7rem;font-size:.75rem;cursor:pointer;white-space:nowrap">+ Add</button>
+        </div>
+      </div>
+      <div class="afield"><label>15-packs sold <span class="atag">$50 / pack</span></label>
+        <div style="display:flex;gap:.4rem">
+          <input type="number" id="inp15" min="0" value="0" style="flex:1">
+          <button onclick="addToField('inp15')" style="background:var(--ndfc-green);color:#fff;border:none;border-radius:7px;padding:.4rem .7rem;font-size:.75rem;cursor:pointer;white-space:nowrap">+ Add</button>
+        </div>
+      </div>
+      <div class="afield"><label>40-packs sold <span class="atag">$100 / pack</span></label>
+        <div style="display:flex;gap:.4rem">
+          <input type="number" id="inp40" min="0" value="0" style="flex:1">
+          <button onclick="addToField('inp40')" style="background:var(--ndfc-green);color:#fff;border:none;border-radius:7px;padding:.4rem .7rem;font-size:.75rem;cursor:pointer;white-space:nowrap">+ Add</button>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:.72rem;color:var(--muted);margin-bottom:.8rem;padding:.6rem .8rem;background:var(--surface2);border-radius:8px;border-left:2px solid var(--ndfc-green);line-height:1.6">
+      <strong style="color:var(--text)">How to use:</strong> The numbers above are <strong style="color:var(--text)">running totals</strong> — always enter the total sold so far, not just new sales. Use <strong style="color:var(--text)">"+ Add"</strong> to add new sales to the existing total automatically, then hit Update.
     </div>
     <div class="abtnrow">
       <button class="btn-upd" onclick="updateTickets()">Update jackpot</button>
@@ -605,13 +628,17 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     <!-- ── Draw winner ── -->
     <div class="draw-divider"></div>
     <div class="draw-section-title">Draw the winner</div>
-    <div class="draw-section-sub">Enter the total number of tickets sold, then hit the draw button. A winning number will be randomly selected from the sold pool with a live animated reveal — perfect for streaming on social media.</div>
+    <div class="draw-section-sub">The ticket pool is automatically pulled from your live sales data. Hit the draw button to randomly select a winner from all sold tickets — perfect for streaming live on social media.</div>
 
     <div class="draw-info-row">
       <div class="draw-info-box">
-        <label>Total tickets sold</label>
-        <input type="number" id="drawTotalSold" min="1" max="5000" placeholder="e.g. 3500" value="">
-        <div class="draw-autofill-note" id="drawAutofillNote">Auto-filled from tickets sold above</div>
+        <label>Tickets in the draw pool</label>
+        <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:.3rem">
+          <span id="drawPoolDisplay" style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--ndfc-green);letter-spacing:.04em">0</span>
+          <span style="font-size:.72rem;color:var(--muted)">tickets · draw picks from #0001 to #<span id="drawPoolMax">0000</span></span>
+        </div>
+        <input type="hidden" id="drawTotalSold" value="0">
+        <div class="draw-autofill-note show" id="drawAutofillNote">Live from Firebase — updates automatically</div>
       </div>
       <div class="draw-info-box">
         <label>Draw event name / note</label>
@@ -702,7 +729,10 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     document.getElementById('pctSold').textContent    = pct.toFixed(1) + '%';
     document.getElementById('revToDate').textContent  = fmt(rev);
     document.getElementById('drawTotalSold').value    = tix;
-    if (tix > 0) document.getElementById('drawAutofillNote').classList.add('show');
+    // Update draw pool display
+    const poolDisplay = document.getElementById('drawPoolDisplay');
+    const poolMax     = document.getElementById('drawPoolMax');
+    if (poolDisplay) poolDisplay.textContent = fmtN(tix);
     // Only sync admin inputs when admin is NOT mid-update
     if (unlocked && !isAdminUpdating) {
       document.getElementById('inp1').value  = s1;
@@ -805,6 +835,15 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
 
   /* ── Admin jackpot updater — writes to Firebase ── */
   const salesLog = []; // kept locally just for the .finally guard
+
+  // "+ Add" button — prompts for new sales and adds to existing total
+  function addToField(id) {
+    const current = parseInt(document.getElementById(id).value) || 0;
+    const add = parseInt(prompt('How many new sales to add to the current total of ' + current + '?'));
+    if (!isNaN(add) && add > 0) {
+      document.getElementById(id).value = current + add;
+    }
+  }
 
   function updateTickets() {
     const s1  = Math.max(0, parseInt(document.getElementById('inp1').value)  || 0);
@@ -944,13 +983,18 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
 
   // Load next ticket number from Firebase and keep it in sync
   nextTicketRef.on('value', snap => {
-    const next = snap.exists() ? snap.val() : 1;
+    const next      = snap.exists() ? snap.val() : 1;
+    const issued    = next - 1;
     const el = document.getElementById('eStartNum');
     if (el) {
       el.value = next;
-      // Only rebuild preview if admin panel is open and buyer fields exist
       if (unlocked && document.getElementById('eBuyerFirst')) buildPreview();
     }
+    // Update draw pool display
+    const pd = document.getElementById('drawPoolDisplay');
+    const pm = document.getElementById('drawPoolMax');
+    if (pd) pd.textContent = issued > 0 ? issued.toLocaleString() : '0';
+    if (pm) pm.textContent = issued > 0 ? padNum(issued) : '0000';
   });
 
   function padNum(n) { return String(n).padStart(4, '0'); }
@@ -1091,58 +1135,72 @@ ${ETRANSFER_EMAIL}`;
   let drawComplete = false;
 
   function runDraw() {
-    const totalSold = parseInt(document.getElementById('drawTotalSold').value) || 0;
-    if (totalSold < 1) { alert('Please enter the total number of tickets sold before drawing.'); return; }
-    if (totalSold > 5000) { alert('Total sold cannot exceed 5,000.'); return; }
-    if (drawComplete) { if (!confirm('A winner has already been drawn. Draw again?')) return; }
+    // Fetch directly from Firebase — uses nextTicketNumber so it only picks from issued tickets
+    nextTicketRef.once('value').then(snap => {
+      const nextNum   = snap.exists() ? snap.val() : 1;
+      const totalSold = nextNum - 1; // highest issued ticket number
 
-    const btn      = document.getElementById('drawBtn');
-    const resultEl = document.getElementById('drawResult');
-    const numEl    = document.getElementById('drawWinningNum');
-    const nameEl   = document.getElementById('drawWinnerName');
-    const noteEl   = document.getElementById('drawWinnerNote');
-    const confetti = document.getElementById('drawConfetti');
-    const labelEl  = document.getElementById('drawEventLabel');
-
-    const eventNote = document.getElementById('drawEventNote').value.trim() || 'NDFC Barca U14 · Italy 2027 · 50/50 Draw';
-    labelEl.textContent = eventNote;
-
-    btn.disabled = true;
-    drawComplete = false;
-    confetti.classList.remove('show');
-    nameEl.textContent = '';
-    noteEl.textContent = '';
-    numEl.classList.add('spinning');
-    resultEl.classList.add('show');
-
-    const SPIN_DURATION = 3500;
-    const SPIN_FAST     = 55;
-    const SPIN_SLOW     = 300;
-    const winner        = Math.floor(Math.random() * totalSold) + 1;
-    const winnerStr     = padNum(winner);
-    const startTime     = Date.now();
-
-    function tick() {
-      const elapsed  = Date.now() - startTime;
-      const progress = Math.min(elapsed / SPIN_DURATION, 1);
-      const interval = SPIN_FAST + (SPIN_SLOW - SPIN_FAST) * (progress * progress);
-
-      if (progress < 1) {
-        numEl.textContent = padNum(Math.floor(Math.random() * totalSold) + 1);
-        setTimeout(tick, interval);
-      } else {
-        numEl.classList.remove('spinning');
-        numEl.textContent = '#' + winnerStr;
-        drawComplete      = true;
-        btn.disabled      = false;
-        const ts          = new Date().toLocaleString();
-        nameEl.textContent = 'Winning ticket: #' + winnerStr;
-        noteEl.textContent = 'Drawn from ' + totalSold.toLocaleString() + ' sold tickets \u00b7 ' + ts;
-        confetti.classList.add('show');
+      if (totalSold < 1) {
+        alert('No tickets have been issued yet. Send at least one ticket confirmation before running the draw.');
+        return;
       }
-    }
+      if (drawComplete) { if (!confirm('A winner has already been drawn. Draw again?')) return; }
 
-    setTimeout(tick, 50);
+      const btn      = document.getElementById('drawBtn');
+      const resultEl = document.getElementById('drawResult');
+      const numEl    = document.getElementById('drawWinningNum');
+      const nameEl   = document.getElementById('drawWinnerName');
+      const noteEl   = document.getElementById('drawWinnerNote');
+      const confetti = document.getElementById('drawConfetti');
+      const labelEl  = document.getElementById('drawEventLabel');
+
+      const eventNote = document.getElementById('drawEventNote').value.trim() || 'NDFC Barca U14 \u00b7 Italy 2027 \u00b7 50/50 Draw';
+      labelEl.textContent = eventNote;
+
+      btn.disabled = true;
+      drawComplete = false;
+      confetti.classList.remove('show');
+      nameEl.textContent = '';
+      noteEl.textContent = '';
+      numEl.classList.add('spinning');
+      resultEl.classList.add('show');
+
+      // Update the pool display with latest count
+      const pd = document.getElementById('drawPoolDisplay');
+      const pm = document.getElementById('drawPoolMax');
+      if (pd) pd.textContent = totalSold.toLocaleString();
+      if (pm) pm.textContent = padNum(totalSold);
+
+      const SPIN_DURATION = 3500;
+      const SPIN_FAST     = 55;
+      const SPIN_SLOW     = 300;
+      const winner    = Math.floor(Math.random() * totalSold) + 1;
+      const winnerStr = padNum(winner);
+      const startTime = Date.now();
+
+      function tick() {
+        const elapsed  = Date.now() - startTime;
+        const progress = Math.min(elapsed / SPIN_DURATION, 1);
+        const interval = SPIN_FAST + (SPIN_SLOW - SPIN_FAST) * (progress * progress);
+        if (progress < 1) {
+          numEl.textContent = padNum(Math.floor(Math.random() * totalSold) + 1);
+          setTimeout(tick, interval);
+        } else {
+          numEl.classList.remove('spinning');
+          numEl.textContent = '#' + winnerStr;
+          drawComplete      = true;
+          btn.disabled      = false;
+          const ts          = new Date().toLocaleString();
+          nameEl.textContent = 'Winning ticket: #' + winnerStr;
+          noteEl.textContent = 'Drawn from ' + totalSold.toLocaleString() + ' issued tickets \u00b7 ' + ts;
+          confetti.classList.add('show');
+        }
+      }
+      setTimeout(tick, 50);
+    }).catch(err => {
+      alert('Could not read ticket data from Firebase: ' + err.message);
+      document.getElementById('drawBtn').disabled = false;
+    });
   }
 
   function resetDraw() {
