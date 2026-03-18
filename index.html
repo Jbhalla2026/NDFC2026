@@ -531,51 +531,27 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
       <div class="apanel-title">Update tickets sold</div>
       <button class="logout-btn" onclick="logout()">Lock panel</button>
     </div>
-    <div style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem">Tap a pack to record a sale — jackpot updates instantly</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.6rem;margin-bottom:1rem">
-      <button class="pack-btn" onclick="recordSale(1,10)">
-        <div class="pb-tix">1</div>
-        <div class="pb-label">Ticket</div>
-        <div class="pb-price">$10</div>
-        <div class="pb-count">Sold: <span id="cnt1">0</span></div>
-      </button>
-      <button class="pack-btn" onclick="recordSale(5,25)">
-        <div class="pb-tix">5</div>
-        <div class="pb-label">Pack</div>
-        <div class="pb-price">$25</div>
-        <div class="pb-count">Sold: <span id="cnt5">0</span></div>
-      </button>
-      <button class="pack-btn best-pack" onclick="recordSale(15,50)">
-        <div style="font-size:.55rem;background:var(--ndfc-green);color:#fff;border-radius:3px;padding:.1rem .4rem;display:inline-block;margin-bottom:.2rem;letter-spacing:.08em;text-transform:uppercase">Best value</div>
-        <div class="pb-tix">15</div>
-        <div class="pb-label">Pack</div>
-        <div class="pb-price">$50</div>
-        <div class="pb-count">Sold: <span id="cnt15">0</span></div>
-      </button>
-      <button class="pack-btn" onclick="recordSale(40,100)">
-        <div class="pb-tix">40</div>
-        <div class="pb-label">Pack</div>
-        <div class="pb-price">$100</div>
-        <div class="pb-count">Sold: <span id="cnt40">0</span></div>
-      </button>
-    </div>
-    <div class="abtnrow">
+    <div class="alog" id="adminLog">Send a ticket confirmation below to update the jackpot.</div>
+    <div style="margin-top:.7rem">
       <button class="btn-upd" style="background:var(--red-dk);color:#fff" onclick="confirmFullReset()">Full reset</button>
     </div>
-    <div class="alog" id="adminLog">No updates recorded yet.</div>
+    <!-- Hidden counters used by recordSale rollback -->
+    <span id="cnt1" style="display:none">0</span>
+    <span id="cnt5" style="display:none">0</span>
+    <span id="cnt15" style="display:none">0</span>
+    <span id="cnt40" style="display:none">0</span>
 
     <!-- Sales history log -->
     <div class="sales-history" id="salesHistory">
-      <div class="sh-label">Sales update history</div>
+      <div class="sh-label">Sales history</div>
       <table class="sh-table">
         <thead>
           <tr>
             <th>Time</th>
-            <th>Singles</th>
-            <th>5-packs</th>
-            <th>15-packs</th>
-            <th>40-packs</th>
-            <th>Total tickets</th>
+            <th>Buyer</th>
+            <th>Package</th>
+            <th>Tickets</th>
+            <th>Total sold</th>
             <th>Pool</th>
           </tr>
         </thead>
@@ -764,16 +740,15 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     if (snap.exists()) {
       snap.forEach(child => {
         entries.push(child.val());
-        return false; // must return false in Firebase forEach to continue iterating
+        return false;
       });
       entries.reverse().forEach(e => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td class="muted">${e.time}</td>
-          <td class="num">${e.s1}</td>
-          <td class="num">${e.s5}</td>
-          <td class="num">${e.s15}</td>
-          <td class="num">${e.s40}</td>
+          <td style="color:var(--text)">${e.buyer || '—'}</td>
+          <td class="num">${e.pkg || '—'}</td>
+          <td class="num">${e.tickets ? '#' + e.tickets : '—'}</td>
           <td class="num">${fmtN(e.tix)}</td>
           <td class="num">${fmt(e.rev)}</td>`;
         tbody.appendChild(tr);
@@ -1114,20 +1089,47 @@ ${ETRANSFER_EMAIL}`;
         message  : body
       });
 
-      // Calculate the next available number and save to Firebase permanently
+      // Work out which pack was sold and increment cur
+      const pkgVal   = document.getElementById('ePkg').value.split('|');
+      const tixCount = parseInt(pkgVal[0]);
+      const pkgPrice = parseInt(pkgVal[1]);
+      const key      = tixCount === 1 ? 's1' : tixCount === 5 ? 's5' : tixCount === 15 ? 's15' : 's40';
+      cur[key]++;
+
+      const tix     = Math.min(cur.s1 + cur.s5*5 + cur.s15*15 + cur.s40*40, TOTAL_TIKS);
+      const rev     = cur.s1*10 + cur.s5*25 + cur.s15*50 + cur.s40*100;
+      const timeStr = new Date().toLocaleTimeString();
+
+      // Update pack button counters
+      const cntEl = document.getElementById('cnt' + (tixCount === 1 ? '1' : tixCount === 5 ? '5' : tixCount === 15 ? '15' : '40'));
+      if (cntEl) cntEl.textContent = cur[key];
+
+      // Calculate next ticket number
       const nums    = getTicketNumbers();
       const nextNum = parseInt(document.getElementById('eStartNum').value) + nums.length;
 
-      // Save to Firebase — this prevents any duplicate ticket numbers ever being issued
-      await nextTicketRef.set(nextNum);
+      // Save everything to Firebase in one go
+      await Promise.all([
+        nextTicketRef.set(nextNum),
+        tickRef.set({ s1: cur.s1, s5: cur.s5, s15: cur.s15, s40: cur.s40, updatedAt: new Date().toISOString() }),
+        historyRef.push({ time: timeStr, buyer: first + ' ' + last, pkg: tixCount + '-ticket ($' + pkgPrice + ')', tickets: nums[0] + '-' + nums[nums.length-1], s1: cur.s1, s5: cur.s5, s15: cur.s15, s40: cur.s40, tix, rev })
+      ]);
 
       logEl.className = 'emailer-log show ok';
-      logEl.textContent = `\u2705 Sent to ${email} \u2014 tickets #${nums[0]} to #${nums[nums.length-1]}. Next available: #${padNum(nextNum)}.`;
+      logEl.textContent = `\u2705 Sent to ${email} \u2014 tickets #${nums[0]} to #${nums[nums.length-1]} \u00b7 Jackpot updated to ${fmt(rev)}.`;
 
       // Clear buyer fields
       ['eBuyerFirst','eBuyerLast','eBuyerEmail'].forEach(id => document.getElementById(id).value = '');
       document.getElementById('eAmtPaid').dataset.edited = '';
       syncPkgFields();
+      document.getElementById('emailPreview').classList.remove('show');
+      btn.textContent = 'Send ticket confirmation email';
+    } catch(err) {
+      logEl.className = 'emailer-log show err';
+      logEl.textContent = 'Send failed: ' + (err.text || err.message || JSON.stringify(err)) + '. Check your EmailJS config.';
+      btn.disabled    = false;
+      btn.textContent = 'Send ticket confirmation email';
+    }
       document.getElementById('emailPreview').classList.remove('show');
       btn.textContent = 'Send ticket confirmation email';
     } catch(err) {
