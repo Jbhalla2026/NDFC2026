@@ -188,6 +188,19 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
 .btn-upd:active{transform:scale(.97)}
 .alog{margin-top:.95rem;font-size:.74rem;color:var(--muted);background:var(--surface2);border-radius:8px;padding:.65rem .9rem;border-left:2px solid var(--ndfc-green);line-height:1.55}
 
+/* Pack sale buttons */
+.pack-btn{background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:.9rem .7rem;text-align:center;cursor:pointer;transition:border-color .15s,transform .1s,background .15s;position:relative;user-select:none;color:var(--text)}
+.pack-btn:hover{border-color:var(--ndfc-green);background:rgba(46,139,58,.08)}
+.pack-btn:active{transform:scale(.95);border-color:var(--ndfc-green);background:rgba(46,139,58,.15)}
+.pack-btn.best-pack{border-color:var(--ndfc-green)}
+.pack-btn.flash{animation:packFlash .35s ease}
+@keyframes packFlash{0%{background:rgba(46,139,58,.35)}100%{background:rgba(46,139,58,.08)}}
+.pb-tix{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text);line-height:1}
+.pb-label{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:.1rem 0 .3rem}
+.pb-price{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--ndfc-green)}
+.pb-count{font-size:.65rem;color:var(--muted);margin-top:.25rem}
+.pb-count span{color:var(--text);font-weight:500}
+
 /* Ticket emailer */
 .emailer-divider{height:1px;background:var(--border);margin:1.4rem 0}
 .emailer-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);margin-bottom:.25rem}
@@ -518,39 +531,36 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
       <div class="apanel-title">Update tickets sold</div>
       <button class="logout-btn" onclick="logout()">Lock panel</button>
     </div>
-    <div class="agrid">
-      <div class="afield"><label>Single tickets sold <span class="atag">$10 each</span></label>
-        <div style="display:flex;gap:.4rem">
-          <input type="number" id="inp1" min="0" value="0" style="flex:1">
-          <button onclick="addToField('inp1')" style="background:var(--ndfc-green);color:#fff;border:none;border-radius:7px;padding:.4rem .7rem;font-size:.75rem;cursor:pointer;white-space:nowrap">+ Add</button>
-        </div>
-      </div>
-      <div class="afield"><label>5-packs sold <span class="atag">$25 / pack</span></label>
-        <div style="display:flex;gap:.4rem">
-          <input type="number" id="inp5" min="0" value="0" style="flex:1">
-          <button onclick="addToField('inp5')" style="background:var(--ndfc-green);color:#fff;border:none;border-radius:7px;padding:.4rem .7rem;font-size:.75rem;cursor:pointer;white-space:nowrap">+ Add</button>
-        </div>
-      </div>
-      <div class="afield"><label>15-packs sold <span class="atag">$50 / pack</span></label>
-        <div style="display:flex;gap:.4rem">
-          <input type="number" id="inp15" min="0" value="0" style="flex:1">
-          <button onclick="addToField('inp15')" style="background:var(--ndfc-green);color:#fff;border:none;border-radius:7px;padding:.4rem .7rem;font-size:.75rem;cursor:pointer;white-space:nowrap">+ Add</button>
-        </div>
-      </div>
-      <div class="afield"><label>40-packs sold <span class="atag">$100 / pack</span></label>
-        <div style="display:flex;gap:.4rem">
-          <input type="number" id="inp40" min="0" value="0" style="flex:1">
-          <button onclick="addToField('inp40')" style="background:var(--ndfc-green);color:#fff;border:none;border-radius:7px;padding:.4rem .7rem;font-size:.75rem;cursor:pointer;white-space:nowrap">+ Add</button>
-        </div>
-      </div>
-    </div>
-    <div style="font-size:.72rem;color:var(--muted);margin-bottom:.8rem;padding:.6rem .8rem;background:var(--surface2);border-radius:8px;border-left:2px solid var(--ndfc-green);line-height:1.6">
-      <strong style="color:var(--text)">How to use:</strong> The numbers above are <strong style="color:var(--text)">running totals</strong> — always enter the total sold so far, not just new sales. Use <strong style="color:var(--text)">"+ Add"</strong> to add new sales to the existing total automatically, then hit Update.
+    <div style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem">Tap a pack to record a sale — jackpot updates instantly</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.6rem;margin-bottom:1rem">
+      <button class="pack-btn" onclick="recordSale(1,10)">
+        <div class="pb-tix">1</div>
+        <div class="pb-label">Ticket</div>
+        <div class="pb-price">$10</div>
+        <div class="pb-count">Sold: <span id="cnt1">0</span></div>
+      </button>
+      <button class="pack-btn" onclick="recordSale(5,25)">
+        <div class="pb-tix">5</div>
+        <div class="pb-label">Pack</div>
+        <div class="pb-price">$25</div>
+        <div class="pb-count">Sold: <span id="cnt5">0</span></div>
+      </button>
+      <button class="pack-btn best-pack" onclick="recordSale(15,50)">
+        <div style="font-size:.55rem;background:var(--ndfc-green);color:#fff;border-radius:3px;padding:.1rem .4rem;display:inline-block;margin-bottom:.2rem;letter-spacing:.08em;text-transform:uppercase">Best value</div>
+        <div class="pb-tix">15</div>
+        <div class="pb-label">Pack</div>
+        <div class="pb-price">$50</div>
+        <div class="pb-count">Sold: <span id="cnt15">0</span></div>
+      </button>
+      <button class="pack-btn" onclick="recordSale(40,100)">
+        <div class="pb-tix">40</div>
+        <div class="pb-label">Pack</div>
+        <div class="pb-price">$100</div>
+        <div class="pb-count">Sold: <span id="cnt40">0</span></div>
+      </button>
     </div>
     <div class="abtnrow">
-      <button class="btn-upd" onclick="updateTickets()">Update jackpot</button>
-      <button class="btn-upd" style="background:var(--red-dk);color:#fff;margin-left:.5rem" onclick="confirmFullReset()">Full reset</button>
-      <span style="font-size:.73rem;color:var(--muted)">Enter cumulative totals per category</span>
+      <button class="btn-upd" style="background:var(--red-dk);color:#fff" onclick="confirmFullReset()">Full reset</button>
     </div>
     <div class="alog" id="adminLog">No updates recorded yet.</div>
 
@@ -717,6 +727,13 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     const s5  = data.s5  || 0;
     const s15 = data.s15 || 0;
     const s40 = data.s40 || 0;
+    // Sync local cur object so recordSale() always increments from correct totals
+    cur.s1 = s1; cur.s5 = s5; cur.s15 = s15; cur.s40 = s40;
+    // Sync pack button counters
+    const c1 = document.getElementById('cnt1');   if (c1)  c1.textContent  = s1;
+    const c5 = document.getElementById('cnt5');   if (c5)  c5.textContent  = s5;
+    const c15= document.getElementById('cnt15');  if (c15) c15.textContent = s15;
+    const c40= document.getElementById('cnt40');  if (c40) c40.textContent = s40;
     const tix = Math.min(s1 + s5*5 + s15*15 + s40*40, TOTAL_TIKS);
     const rev = s1*10 + s5*25 + s15*50 + s40*100;
     const pct = tix / TOTAL_TIKS * 100;
@@ -729,17 +746,9 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     document.getElementById('pctSold').textContent    = pct.toFixed(1) + '%';
     document.getElementById('revToDate').textContent  = fmt(rev);
     document.getElementById('drawTotalSold').value    = tix;
-    // Update draw pool display
     const poolDisplay = document.getElementById('drawPoolDisplay');
     const poolMax     = document.getElementById('drawPoolMax');
     if (poolDisplay) poolDisplay.textContent = fmtN(tix);
-    // Only sync admin inputs when admin is NOT mid-update
-    if (unlocked && !isAdminUpdating) {
-      document.getElementById('inp1').value  = s1;
-      document.getElementById('inp5').value  = s5;
-      document.getElementById('inp15').value = s15;
-      document.getElementById('inp40').value = s40;
-    }
   }
 
   // Subscribe — fires instantly on page load AND every time admin updates
@@ -833,59 +842,60 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
     }
   }
 
-  /* ── Admin jackpot updater — writes to Firebase ── */
-  const salesLog = []; // kept locally just for the .finally guard
+  /* ── Pack sale buttons — tap to record a sale instantly ── */
+  const salesLog = [];
 
-  // "+ Add" button — prompts for new sales and adds to existing total
-  function addToField(id) {
-    const current = parseInt(document.getElementById(id).value) || 0;
-    const add = parseInt(prompt('How many new sales to add to the current total of ' + current + '?'));
-    if (!isNaN(add) && add > 0) {
-      document.getElementById(id).value = current + add;
-    }
-  }
+  // Current running totals (loaded from Firebase on login)
+  let cur = { s1: 0, s5: 0, s15: 0, s40: 0 };
 
-  function updateTickets() {
-    const s1  = Math.max(0, parseInt(document.getElementById('inp1').value)  || 0);
-    const s5  = Math.max(0, parseInt(document.getElementById('inp5').value)  || 0);
-    const s15 = Math.max(0, parseInt(document.getElementById('inp15').value) || 0);
-    const s40 = Math.max(0, parseInt(document.getElementById('inp40').value) || 0);
-    const tix = Math.min(s1 + s5*5 + s15*15 + s40*40, TOTAL_TIKS);
-    const rev = s1*10 + s5*25 + s15*50 + s40*100;
+  function recordSale(tixPerPack, pricePerPack) {
+    // Work out which field to increment
+    const key = tixPerPack === 1 ? 's1' : tixPerPack === 5 ? 's5' : tixPerPack === 15 ? 's15' : 's40';
+    cur[key]++;
+
+    const tix = Math.min(cur.s1 + cur.s5*5 + cur.s15*15 + cur.s40*40, TOTAL_TIKS);
+    const rev = cur.s1*10 + cur.s5*25 + cur.s15*50 + cur.s40*100;
     const timeStr = new Date().toLocaleTimeString();
-    const parts = [];
-    if (s1)  parts.push(s1  + ' single');
-    if (s5)  parts.push(s5  + ' \xd75-pack');
-    if (s15) parts.push(s15 + ' \xd715-pack');
-    if (s40) parts.push(s40 + ' \xd740-pack');
 
-    document.getElementById('adminLog').textContent = timeStr + ' \u2014 Saving to Firebase\u2027';
-    isAdminUpdating = true;
+    // Flash the button
+    const btnId = tixPerPack === 1 ? 0 : tixPerPack === 5 ? 1 : tixPerPack === 15 ? 2 : 3;
+    const btns = document.querySelectorAll('.pack-btn');
+    if (btns[btnId]) { btns[btnId].classList.remove('flash'); void btns[btnId].offsetWidth; btns[btnId].classList.add('flash'); }
 
-    // Write current totals
-    const saveTickets = tickRef.set({ s1, s5, s15, s40, updatedAt: new Date().toISOString() });
+    // Update sold counters on buttons
+    document.getElementById('cnt1').textContent  = cur.s1;
+    document.getElementById('cnt5').textContent  = cur.s5;
+    document.getElementById('cnt15').textContent = cur.s15;
+    document.getElementById('cnt40').textContent = cur.s40;
 
-    // Push a new history entry (push() creates a unique key each time)
-    const saveHistory = historyRef.push({ time: timeStr, s1, s5, s15, s40, tix, rev });
+    document.getElementById('adminLog').textContent = timeStr + ' \u2014 Saving\u2026';
+
+    // Write to Firebase
+    const saveTickets = tickRef.set({ s1: cur.s1, s5: cur.s5, s15: cur.s15, s40: cur.s40, updatedAt: new Date().toISOString() });
+    const saveHistory = historyRef.push({ time: timeStr, s1: cur.s1, s5: cur.s5, s15: cur.s15, s40: cur.s40, tix, rev });
 
     Promise.all([saveTickets, saveHistory])
       .then(() => {
-        document.getElementById('adminLog').textContent = timeStr + ' \u2014 \u2705 Saved! ' + (parts.length ? parts.join(', ') : 'reset') + '. Total ' + fmtN(tix) + ' tickets \u00b7 Pool ' + fmt(rev) + '.';
+        document.getElementById('adminLog').textContent = timeStr + ' \u2014 \u2705 ' + tixPerPack + '-ticket pack ($' + pricePerPack + ') recorded. Total ' + fmtN(tix) + ' tickets \u00b7 Pool ' + fmt(rev) + '.';
       })
       .catch(err => {
-        document.getElementById('adminLog').textContent = '\u274c Firebase save failed: ' + err.message;
-      })
-      .finally(() => {
-        setTimeout(() => { isAdminUpdating = false; }, 1000);
+        document.getElementById('adminLog').textContent = '\u274c Save failed: ' + err.message;
+        cur[key]--; // roll back on failure
+        document.getElementById('cnt' + (tixPerPack === 1 ? '1' : tixPerPack === 5 ? '5' : tixPerPack === 15 ? '15' : '40')).textContent = cur[key];
       });
   }
 
   function renderSalesHistory() {
-    // No-op — rendering is now handled by the historyRef Firebase listener above
+    // No-op — handled by Firebase listener
+  }
+  function clearSalesHistory() {
+    historyRef.remove().catch(err => alert('Could not clear history: ' + err.message));
   }
 
+  function updateTickets() { /* replaced by recordSale() */ }
+
+  function renderSalesHistory() { /* handled by Firebase listener */ }
   function clearSalesHistory() {
-    // Remove all history entries from Firebase
     historyRef.remove().catch(err => alert('Could not clear history: ' + err.message));
   }
 
@@ -902,9 +912,8 @@ h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:.05em}
       nextTicketRef.set(1)
     ])
     .then(() => {
-      // Reset all admin inputs
-      ['inp1','inp5','inp15','inp40'].forEach(id => document.getElementById(id).value = 0);
-      // Reset draw
+      cur = { s1: 0, s5: 0, s15: 0, s40: 0 };
+      ['cnt1','cnt5','cnt15','cnt40'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = '0'; });
       resetDraw();
       document.getElementById('adminLog').textContent = new Date().toLocaleTimeString() + ' \u2014 \u2705 Full reset complete. All tickets and history cleared.';
     })
