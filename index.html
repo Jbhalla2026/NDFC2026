@@ -1212,39 +1212,36 @@ ${ETRANSFER_EMAIL}`;
               infoBox.style.display = 'block';
               return;
             }
-            let found = null;
+
+            // Parse any ticket range format into {start, end}
+            function parseRange(e) {
+              // Format A: ticketStart + ticketEnd integers
+              if (e.ticketStart !== undefined && e.ticketEnd !== undefined) {
+                return { start: parseInt(e.ticketStart), end: parseInt(e.ticketEnd) };
+              }
+              // Format B: tickets field — could be string "0001-0015" or array ["0001-0015"]
+              let raw = e.tickets;
+              if (Array.isArray(raw)) raw = raw[0];
+              if (typeof raw === 'string' && raw.indexOf('-') > -1) {
+                const lastDash = raw.lastIndexOf('-');
+                return {
+                  start: parseInt(raw.substring(0, lastDash), 10),
+                  end  : parseInt(raw.substring(lastDash + 1), 10)
+                };
+              }
+              return { start: null, end: null };
+            }
+
             const winnerNum = parseInt(winnerStr);
+            let found = null;
             const debugLines = [];
 
             hsnap.forEach(child => {
               const e = child.val();
-              let start = null, end = null;
-
-              // Format 1: ticketStart / ticketEnd as integers
-              if (e.ticketStart !== undefined && e.ticketEnd !== undefined) {
-                start = parseInt(e.ticketStart);
-                end   = parseInt(e.ticketEnd);
-              }
-              // Format 2: tickets as "0001-0015" string OR ["0001-0015"] array
-              else if (e.tickets) {
-                const raw = Array.isArray(e.tickets) ? e.tickets[0] : e.tickets;
-                if (typeof raw === 'string' && raw.indexOf('-') > -1) {
-                  const lastDash = raw.lastIndexOf('-');
-                  start = parseInt(raw.substring(0, lastDash), 10);
-                  end   = parseInt(raw.substring(lastDash + 1), 10);
-                }
-              }
-              // Format 3: single ticket stored as number or string
-              else if (e.tickets && typeof e.tickets === 'number') {
-                start = e.tickets;
-                end   = e.tickets;
-              }
-
-              debugLines.push((e.buyer||'?') + ' tickets=[' + JSON.stringify(e.tickets) + '] start=' + start + ' end=' + end + ' match=' + (start!==null && winnerNum>=start && winnerNum<=end));
-
-              if (start !== null && end !== null && !isNaN(start) && !isNaN(end) && winnerNum >= start && winnerNum <= end) {
-                found = e;
-              }
+              const { start, end } = parseRange(e);
+              const match = start !== null && end !== null && !isNaN(start) && !isNaN(end) && winnerNum >= start && winnerNum <= end;
+              debugLines.push((e.buyer || '?') + ' tickets=' + JSON.stringify(e.tickets) + ' start=' + start + ' end=' + end + ' match=' + match);
+              if (match) found = e;
               return false;
             });
 
@@ -1252,7 +1249,7 @@ ${ETRANSFER_EMAIL}`;
               infoDetails.innerHTML =
                 '<strong style="color:var(--text)">' + (found.buyer || '—') + '</strong><br>' +
                 '<span style="color:var(--muted)">' + (found.email || '—') + '</span><br>' +
-                '<span style="color:var(--muted);font-size:.78rem">Package: ' + (found.pkg || '—') + ' &bull; Tickets: #' + (found.tickets || (found.ticketStart + '-' + found.ticketEnd) || '—') + '</span>';
+                '<span style="color:var(--muted);font-size:.78rem">Package: ' + (found.pkg || '—') + ' &bull; Tickets: #' + (Array.isArray(found.tickets) ? found.tickets[0] : (found.tickets || '—')) + '</span>';
               infoBox.style.display = 'block';
             } else {
               infoDetails.innerHTML =
