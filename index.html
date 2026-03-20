@@ -1225,11 +1225,14 @@ ${ETRANSFER_EMAIL}`;
                 start = parseInt(e.ticketStart);
                 end   = parseInt(e.ticketEnd);
               }
-              // Format 2: tickets as "0001-0015" (padded with leading zeros)
-              else if (e.tickets && typeof e.tickets === 'string' && e.tickets.indexOf('-') > -1) {
-                const lastDash = e.tickets.lastIndexOf('-');
-                start = parseInt(e.tickets.substring(0, lastDash), 10);
-                end   = parseInt(e.tickets.substring(lastDash + 1), 10);
+              // Format 2: tickets as "0001-0015" string OR ["0001-0015"] array
+              else if (e.tickets) {
+                const raw = Array.isArray(e.tickets) ? e.tickets[0] : e.tickets;
+                if (typeof raw === 'string' && raw.indexOf('-') > -1) {
+                  const lastDash = raw.lastIndexOf('-');
+                  start = parseInt(raw.substring(0, lastDash), 10);
+                  end   = parseInt(raw.substring(lastDash + 1), 10);
+                }
               }
               // Format 3: single ticket stored as number or string
               else if (e.tickets && typeof e.tickets === 'number') {
