@@ -1207,9 +1207,14 @@ ${ETRANSFER_EMAIL}`;
           historyRef.once('value').then(hsnap => {
             const infoBox     = document.getElementById('drawWinnerInfo');
             const infoDetails = document.getElementById('drawWinnerDetails');
-            if (!hsnap.exists()) return;
+            if (!hsnap.exists()) {
+              infoDetails.innerHTML = '<span style="color:var(--muted)">No sales history found in Firebase.</span>';
+              infoBox.style.display = 'block';
+              return;
+            }
             let found = null;
             const winnerNum = parseInt(winnerStr);
+            const debugLines = [];
             hsnap.forEach(child => {
               const e = child.val();
               let start = null, end = null;
@@ -1224,6 +1229,7 @@ ${ETRANSFER_EMAIL}`;
                 start = parseInt(parts[0]);
                 end   = parseInt(parts[1]);
               }
+              debugLines.push((e.buyer || '?') + ': tickets=' + JSON.stringify(e.tickets) + ' start=' + start + ' end=' + end);
               if (start !== null && end !== null && winnerNum >= start && winnerNum <= end) {
                 found = e;
               }
@@ -1236,7 +1242,10 @@ ${ETRANSFER_EMAIL}`;
                 '<span style="color:var(--muted);font-size:.78rem">Package: ' + (found.pkg || '—') + ' &bull; Tickets: #' + (found.tickets || found.ticketStart + '-' + found.ticketEnd || '—') + '</span>';
               infoBox.style.display = 'block';
             } else {
-              infoDetails.innerHTML = '<span style="color:var(--muted)">Ticket #' + winnerStr + ' — buyer details not found in history. Check your sales log.</span>';
+              infoDetails.innerHTML =
+                '<span style="color:var(--muted)">Ticket #' + winnerStr + ' (number: ' + winnerNum + ') not matched.<br><br>' +
+                '<strong style="color:var(--text)">Debug — entries in Firebase:</strong><br>' +
+                debugLines.join('<br>') + '</span>';
               infoBox.style.display = 'block';
             }
           });
