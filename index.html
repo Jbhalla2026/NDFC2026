@@ -1203,6 +1203,10 @@ ${ETRANSFER_EMAIL}`;
           noteEl.textContent = 'Drawn from ' + totalSold.toLocaleString() + ' issued tickets \u00b7 ' + ts;
           confetti.classList.add('show');
 
+          // Capture these NOW as local consts before the async Firebase call
+          const _winnerNum = winner;
+          const _winnerStr = winnerStr;
+
           // Look up who holds the winning ticket in the sales history
           historyRef.once('value').then(hsnap => {
             const infoBox     = document.getElementById('drawWinnerInfo');
@@ -1215,11 +1219,9 @@ ${ETRANSFER_EMAIL}`;
 
             // Parse any ticket range format into {start, end}
             function parseRange(e) {
-              // Format A: ticketStart + ticketEnd integers
               if (e.ticketStart !== undefined && e.ticketEnd !== undefined) {
                 return { start: parseInt(e.ticketStart), end: parseInt(e.ticketEnd) };
               }
-              // Format B: tickets field — could be string "0001-0015" or array ["0001-0015"]
               let raw = e.tickets;
               if (Array.isArray(raw)) raw = raw[0];
               if (typeof raw === 'string' && raw.indexOf('-') > -1) {
@@ -1232,14 +1234,14 @@ ${ETRANSFER_EMAIL}`;
               return { start: null, end: null };
             }
 
-            const winnerNum = parseInt(winnerStr);
             let found = null;
             const debugLines = [];
 
             hsnap.forEach(child => {
+              if (found) return true;
               const e = child.val();
               const { start, end } = parseRange(e);
-              const match = start !== null && end !== null && !isNaN(start) && !isNaN(end) && winnerNum >= start && winnerNum <= end;
+              const match = start !== null && end !== null && !isNaN(start) && !isNaN(end) && _winnerNum >= start && _winnerNum <= end;
               debugLines.push((e.buyer || '?') + ' tickets=' + JSON.stringify(e.tickets) + ' start=' + start + ' end=' + end + ' match=' + match);
               if (match) found = e;
               return false;
@@ -1253,7 +1255,7 @@ ${ETRANSFER_EMAIL}`;
               infoBox.style.display = 'block';
             } else {
               infoDetails.innerHTML =
-                '<span style="color:var(--muted)">Winner #' + winnerStr + ' (=' + winnerNum + ')<br><br>' +
+                '<span style="color:var(--muted)">Winner #' + _winnerStr + ' (=' + _winnerNum + ')<br><br>' +
                 '<strong style="color:var(--text)">Firebase entries:</strong><br>' +
                 debugLines.join('<br>') + '</span>';
               infoBox.style.display = 'block';
