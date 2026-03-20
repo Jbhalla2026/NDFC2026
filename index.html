@@ -1208,43 +1208,53 @@ ${ETRANSFER_EMAIL}`;
             const infoBox     = document.getElementById('drawWinnerInfo');
             const infoDetails = document.getElementById('drawWinnerDetails');
             if (!hsnap.exists()) {
-              infoDetails.innerHTML = '<span style="color:var(--muted)">No sales history found in Firebase.</span>';
+              infoDetails.innerHTML = '<span style="color:var(--muted)">No sales history in Firebase.</span>';
               infoBox.style.display = 'block';
               return;
             }
             let found = null;
             const winnerNum = parseInt(winnerStr);
             const debugLines = [];
+
             hsnap.forEach(child => {
               const e = child.val();
               let start = null, end = null;
-              // New format: ticketStart / ticketEnd stored as integers
-              if (e.ticketStart && e.ticketEnd) {
+
+              // Format 1: ticketStart / ticketEnd as integers
+              if (e.ticketStart !== undefined && e.ticketEnd !== undefined) {
                 start = parseInt(e.ticketStart);
                 end   = parseInt(e.ticketEnd);
               }
-              // Old format: tickets stored as "0001-0015" string
-              else if (e.tickets && e.tickets.indexOf('-') > -1) {
+              // Format 2: tickets as "0001-0015" (padded with leading zeros)
+              else if (e.tickets && typeof e.tickets === 'string' && e.tickets.indexOf('-') > -1) {
                 const parts = e.tickets.split('-');
-                start = parseInt(parts[0]);
-                end   = parseInt(parts[1]);
+                start = parseInt(parts[0], 10);
+                end   = parseInt(parts[1], 10);
               }
-              debugLines.push((e.buyer || '?') + ': tickets=' + JSON.stringify(e.tickets) + ' start=' + start + ' end=' + end);
-              if (start !== null && end !== null && winnerNum >= start && winnerNum <= end) {
+              // Format 3: single ticket stored as number or string
+              else if (e.tickets && typeof e.tickets === 'number') {
+                start = e.tickets;
+                end   = e.tickets;
+              }
+
+              debugLines.push((e.buyer||'?') + ' tickets=[' + JSON.stringify(e.tickets) + '] start=' + start + ' end=' + end + ' match=' + (start!==null && winnerNum>=start && winnerNum<=end));
+
+              if (start !== null && end !== null && !isNaN(start) && !isNaN(end) && winnerNum >= start && winnerNum <= end) {
                 found = e;
               }
               return false;
             });
+
             if (found) {
               infoDetails.innerHTML =
                 '<strong style="color:var(--text)">' + (found.buyer || '—') + '</strong><br>' +
                 '<span style="color:var(--muted)">' + (found.email || '—') + '</span><br>' +
-                '<span style="color:var(--muted);font-size:.78rem">Package: ' + (found.pkg || '—') + ' &bull; Tickets: #' + (found.tickets || found.ticketStart + '-' + found.ticketEnd || '—') + '</span>';
+                '<span style="color:var(--muted);font-size:.78rem">Package: ' + (found.pkg || '—') + ' &bull; Tickets: #' + (found.tickets || (found.ticketStart + '-' + found.ticketEnd) || '—') + '</span>';
               infoBox.style.display = 'block';
             } else {
               infoDetails.innerHTML =
-                '<span style="color:var(--muted)">Ticket #' + winnerStr + ' (number: ' + winnerNum + ') not matched.<br><br>' +
-                '<strong style="color:var(--text)">Debug — entries in Firebase:</strong><br>' +
+                '<span style="color:var(--muted)">Winner #' + winnerStr + ' (=' + winnerNum + ')<br><br>' +
+                '<strong style="color:var(--text)">Firebase entries:</strong><br>' +
                 debugLines.join('<br>') + '</span>';
               infoBox.style.display = 'block';
             }
