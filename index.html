@@ -1227,9 +1227,9 @@ ${ETRANSFER_EMAIL}`;
               }
               // Format 2: tickets as "0001-0015" (padded with leading zeros)
               else if (e.tickets && typeof e.tickets === 'string' && e.tickets.indexOf('-') > -1) {
-                const parts = e.tickets.split('-');
-                start = parseInt(parts[0], 10);
-                end   = parseInt(parts[1], 10);
+                const lastDash = e.tickets.lastIndexOf('-');
+                start = parseInt(e.tickets.substring(0, lastDash), 10);
+                end   = parseInt(e.tickets.substring(lastDash + 1), 10);
               }
               // Format 3: single ticket stored as number or string
               else if (e.tickets && typeof e.tickets === 'number') {
